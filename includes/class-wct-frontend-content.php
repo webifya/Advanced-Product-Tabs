@@ -5,7 +5,7 @@ defined( 'ABSPATH' ) || exit;
 final class WCT_Frontend_Content {
     public static function init(): void {
         add_filter( 'woocommerce_product_tabs', array( __CLASS__, 'wrap_custom_tab_callbacks' ), 1001 );
-        add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_layout_fixes' ), 30 );
+        add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_layout_fixes' ), 999 );
     }
 
     public static function enqueue_layout_fixes(): void {
@@ -17,6 +17,13 @@ final class WCT_Frontend_Content {
             'wct-frontend-layout-fixes',
             WCT_URL . 'assets/frontend-layout-fixes.css',
             array( 'wct-frontend' ),
+            WCT_VERSION
+        );
+
+        wp_enqueue_style(
+            'wct-frontend-list-markers',
+            WCT_URL . 'assets/frontend-list-markers.css',
+            array( 'wct-frontend-layout-fixes' ),
             WCT_VERSION
         );
     }
