@@ -1,10 +1,10 @@
 === Product Tabs for WooCommerce ===
-Contributors: webifya
-Tags: woocommerce, product tabs, custom tabs, responsive tabs, accordion
+Contributors: mahfuzarrahman
+Tags: woocommerce, product tabs, custom tabs, responsive tabs, accordion, drag and drop
 Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,14 +12,17 @@ Create responsive global and product-specific tabs for WooCommerce products.
 
 == Description ==
 
-Product Tabs for WooCommerce by Webifya adds a flexible product-tab manager with responsive mobile behavior.
+Product Tabs for WooCommerce by Mahfuzar Rahman adds a flexible product-tab manager with responsive mobile behavior and drag-and-drop ordering inside the WooCommerce product editor.
+
+Plugin website: https://webninjallc.com
 
 Features:
 
 * Unlimited product-specific tabs.
 * Reusable global tabs under WooCommerce > Product Tabs.
 * Assign global tabs to all products, selected products, product categories, or product tags.
-* Drag-and-drop ordering for product-specific tabs.
+* Drag-and-drop ordering for product-specific tabs directly in Product data > Custom Tabs.
+* Automatically saves the dragged order and uses it on the storefront.
 * Numeric priority control alongside WooCommerce default tabs.
 * Enable or disable individual product tabs.
 * Responsive mobile accordion mode with configurable breakpoint.
@@ -39,10 +42,16 @@ Features:
 2. Activate WooCommerce.
 3. Activate Product Tabs for WooCommerce.
 4. Edit a product and open Product data > Custom Tabs.
-5. For reusable tabs, go to WooCommerce > Product Tabs.
-6. Configure responsive behavior under WooCommerce > Tab Settings.
+5. Add tabs, then drag them using the move handle to set their order.
+6. Update the product to save the new order.
+7. For reusable tabs, go to WooCommerce > Product Tabs.
+8. Configure responsive behavior under WooCommerce > Tab Settings.
 
 == Frequently Asked Questions ==
+
+= How does drag-and-drop ordering work? =
+
+Open Product data > Custom Tabs, drag a tab by its move handle, and update the product. The plugin reindexes the tab fields after every move and displays them in the same saved order on the storefront.
 
 = How do tab priorities work? =
 
@@ -62,8 +71,12 @@ No. Data is retained by default. To delete it during uninstall, define `WCT_DELE
 
 == Changelog ==
 
+= 1.1.1 =
+* Updated author branding to Mahfuzar Rahman and webninjallc.com.
+* Improved drag-and-drop ordering feedback and reliable field reindexing.
+* Documented product-page tab ordering workflow.
+
 = 1.1.0 =
-* Rebranded as Product Tabs for WooCommerce by Webifya.
 * Added responsive mobile accordion behavior.
 * Added configurable breakpoint and first-panel state.
 * Added desktop pill and underline styles.
