@@ -25,6 +25,7 @@ define( 'WCT_URL', plugin_dir_url( __FILE__ ) );
 
 require_once WCT_PATH . 'includes/class-wct-plugin.php';
 require_once WCT_PATH . 'includes/class-wct-enhancements.php';
+require_once WCT_PATH . 'includes/class-wct-product-extras.php';
 
 register_activation_hook( __FILE__, array( 'WCT_Plugin', 'activate' ) );
 
@@ -33,5 +34,6 @@ add_action(
     static function () {
         WCT_Plugin::instance();
         WCT_Enhancements::instance();
+        WCT_Product_Extras::init();
     }
 );
