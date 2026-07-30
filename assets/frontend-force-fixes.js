@@ -68,12 +68,11 @@
         });
     }
 
-    function fixElement(element) {
+    function fixBlock(element) {
+        setImportant(element, 'box-sizing', 'border-box');
         setImportant(element, 'max-width', 'none');
-        setImportant(element, 'height', 'auto');
         setImportant(element, 'margin-left', '0');
         setImportant(element, 'margin-right', '0');
-        setImportant(element, 'position', 'static');
         setImportant(element, 'left', 'auto');
         setImportant(element, 'right', 'auto');
         setImportant(element, 'transform', 'none');
@@ -81,24 +80,30 @@
         setImportant(element, 'text-align', 'left');
     }
 
-    function fixWrapper(wrapper) {
-        setImportant(wrapper, 'display', 'block');
-        setImportant(wrapper, 'box-sizing', 'border-box');
-        setImportant(wrapper, 'width', '100%');
-        setImportant(wrapper, 'max-width', 'none');
-        setImportant(wrapper, 'height', 'auto');
-        setImportant(wrapper, 'margin', '0');
-        setImportant(wrapper, 'padding-left', '0');
-        setImportant(wrapper, 'padding-right', '0');
-        setImportant(wrapper, 'position', 'static');
-        setImportant(wrapper, 'left', 'auto');
-        setImportant(wrapper, 'right', 'auto');
-        setImportant(wrapper, 'transform', 'none');
-        setImportant(wrapper, 'float', 'none');
-        setImportant(wrapper, 'text-align', 'left');
+    function fixContainer(element) {
+        fixBlock(element);
+        setImportant(element, 'display', 'block');
+        setImportant(element, 'width', '100%');
+        setImportant(element, 'height', 'auto');
+        setImportant(element, 'margin', '0');
+        setImportant(element, 'padding-left', '0');
+        setImportant(element, 'padding-right', '0');
+        setImportant(element, 'position', 'static');
+    }
 
-        Array.prototype.forEach.call(wrapper.children, fixElement);
-        wrapper.querySelectorAll('.section_wrapper, .container').forEach(fixElement);
+    function fixWrapper(wrapper) {
+        fixContainer(wrapper);
+        setImportant(wrapper, 'align-self', 'stretch');
+        setImportant(wrapper, 'flex', '1 1 100%');
+
+        if (wrapper.parentElement) {
+            setImportant(wrapper.parentElement, 'text-align', 'left');
+            setImportant(wrapper.parentElement, 'align-items', 'stretch');
+            setImportant(wrapper.parentElement, 'justify-content', 'flex-start');
+        }
+
+        wrapper.querySelectorAll('.section_wrapper, .container, .column, .column_attr, section, article').forEach(fixContainer);
+        wrapper.querySelectorAll('p, h1, h2, h3, h4, h5, h6, div, blockquote, address, pre, figure, table').forEach(fixBlock);
         wrapper.querySelectorAll('ul, ol').forEach(fixList);
     }
 
