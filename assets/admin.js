@@ -20,6 +20,26 @@
         $(document.body).trigger('wct_tabs_reordered');
     }
 
+    function collapseRow($row, animate) {
+        var $fields = $row.find('> .wct-tab-fields');
+        $row.removeClass('is-open').addClass('is-collapsed');
+        $row.find('> .wct-tab-row-bar .wct-toggle').attr('aria-expanded', 'false').text('Expand');
+        animate ? $fields.stop(true, true).slideUp(140) : $fields.hide();
+    }
+
+    function expandRow($row, animate) {
+        var $list = $row.closest('.wct-tab-list');
+
+        $list.children('.wct-tab-row').not($row).each(function () {
+            collapseRow($(this), animate);
+        });
+
+        var $fields = $row.find('> .wct-tab-fields');
+        $row.removeClass('is-collapsed').addClass('is-open');
+        $row.find('> .wct-tab-row-bar .wct-toggle').attr('aria-expanded', 'true').text('Collapse');
+        animate ? $fields.stop(true, true).slideDown(140) : $fields.show();
+    }
+
     $(function () {
         var $list = $('.wct-tab-list');
 
@@ -28,6 +48,14 @@
         }
 
         reindexRows($list);
+
+        $list.children('.wct-tab-row').each(function (index) {
+            if (index === 0) {
+                expandRow($(this), false);
+            } else {
+                collapseRow($(this), false);
+            }
+        });
 
         $list.sortable({
             handle: '.wct-drag',
@@ -59,19 +87,35 @@
 
         $('.wct-add-tab').on('click', function () {
             var template = wp.template('wct-tab-row');
-            $list.append(template({ index: $list.children('.wct-tab-row').length }));
+            var $row = $(template({ index: $list.children('.wct-tab-row').length }));
+            $list.append($row);
             reindexRows($list);
+            expandRow($row, true);
             markProductChanged();
         });
 
         $list.on('click', '.wct-remove', function () {
-            $(this).closest('.wct-tab-row').remove();
+            var $row = $(this).closest('.wct-tab-row');
+            var wasOpen = $row.hasClass('is-open');
+            $row.remove();
             reindexRows($list);
+            if (wasOpen && $list.children('.wct-tab-row').length) {
+                expandRow($list.children('.wct-tab-row').first(), true);
+            }
             markProductChanged();
         });
 
-        $list.on('click', '.wct-toggle', function () {
-            $(this).closest('.wct-tab-row').find('.wct-tab-fields').slideToggle(150);
+        $list.on('click', '.wct-toggle, .wct-row-title', function (event) {
+            if ($(event.target).closest('.wct-remove, .wct-drag').length) {
+                return;
+            }
+
+            var $row = $(this).closest('.wct-tab-row');
+            if ($row.hasClass('is-open')) {
+                collapseRow($row, true);
+            } else {
+                expandRow($row, true);
+            }
         });
 
         $list.on('input change', 'input, textarea, select', function () {
