@@ -42,9 +42,9 @@
             '<div class="wct-extra-field wct-icon-field"><label>Icon</label><div class="wct-icon-control">' +
             '<input type="hidden" class="wct-icon-value" name="wct_tabs[' + index + '][icon]" value="' + escapeHtml(icon) + '">' +
             iconButton(icon) +
-            '<button type="button" class="button-link-delete wct-clear-icon"' + (icon ? '' : ' hidden') + '>Remove icon</button></div><p class="description">Choose from the WordPress Dashicons gallery.</p></div>' +
+            '<button type="button" class="button-link-delete wct-clear-icon"' + (icon ? '' : ' hidden') + '>Remove icon</button></div></div>' +
             '<div class="wct-extra-field"><label>Custom CSS class</label><input type="text" name="wct_tabs[' + index + '][css_class]" value="' + escapeHtml(extras.css_class || '') + '" placeholder="example-class"></div>' +
-            '<div class="wct-extra-field"><label>Visibility</label><select name="wct_tabs[' + index + '][visibility]">' +
+            '<div class="wct-extra-field wct-visibility-field"><label>Visibility</label><select name="wct_tabs[' + index + '][visibility]">' +
             '<option value="all"' + (visibility === 'all' ? ' selected' : '') + '>Everyone</option>' +
             '<option value="logged_in"' + (visibility === 'logged_in' ? ' selected' : '') + '>Logged-in users</option>' +
             '<option value="logged_out"' + (visibility === 'logged_out' ? ' selected' : '') + '>Guests only</option>' +
