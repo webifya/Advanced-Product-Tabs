@@ -25,6 +25,13 @@ final class WCT_Rich_Editor {
             WCT_VERSION
         );
 
+        wp_enqueue_style(
+            'wct-product-editor-fixes',
+            WCT_URL . 'assets/product-editor-fixes.css',
+            array( 'wct-product-editor' ),
+            WCT_VERSION
+        );
+
         wp_enqueue_script(
             'wct-product-editor',
             WCT_URL . 'assets/product-editor.js',
@@ -43,10 +50,6 @@ final class WCT_Rich_Editor {
         );
     }
 
-    /**
-     * Product-specific custom tabs are ordered from their saved array order.
-     * This removes the need for a visible priority field in the product editor.
-     */
     public static function apply_drag_order( array $tabs ): array {
         $position = 0;
 
