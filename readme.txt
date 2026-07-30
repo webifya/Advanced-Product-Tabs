@@ -1,10 +1,10 @@
 === Product Tabs for WooCommerce ===
 Contributors: mahfuzarrahman
-Tags: woocommerce, product tabs, custom tabs, responsive tabs, accordion, drag and drop
+Tags: woocommerce, product tabs, custom tabs, responsive tabs, accordion, rich text
 Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.1.1
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Create responsive global and product-specific tabs for WooCommerce products.
 
 == Description ==
 
-Product Tabs for WooCommerce by Mahfuzar Rahman adds a flexible product-tab manager with responsive mobile behavior and drag-and-drop ordering inside the WooCommerce product editor.
+Product Tabs for WooCommerce by Mahfuzar Rahman adds a flexible product-tab manager with responsive mobile behavior.
 
 Plugin website: https://webninjallc.com
 
@@ -21,9 +21,9 @@ Features:
 * Unlimited product-specific tabs.
 * Reusable global tabs under WooCommerce > Product Tabs.
 * Assign global tabs to all products, selected products, product categories, or product tags.
-* Drag-and-drop ordering for product-specific tabs directly in Product data > Custom Tabs.
-* Automatically saves the dragged order and uses it on the storefront.
-* Numeric priority control alongside WooCommerce default tabs.
+* Drag-and-drop ordering for product-specific tabs.
+* Rich-text Visual/Text editor for product tab content.
+* WordPress Media Library support for images, documents, and other media.
 * Enable or disable individual product tabs.
 * Responsive mobile accordion mode with configurable breakpoint.
 * Open or close the first accordion item by default.
@@ -42,20 +42,20 @@ Features:
 2. Activate WooCommerce.
 3. Activate Product Tabs for WooCommerce.
 4. Edit a product and open Product data > Custom Tabs.
-5. Add tabs, then drag them using the move handle to set their order.
-6. Update the product to save the new order.
+5. Add tabs, write content using the Visual/Text editor, and drag tabs into the required order.
+6. Update the product to save the content and order.
 7. For reusable tabs, go to WooCommerce > Product Tabs.
 8. Configure responsive behavior under WooCommerce > Tab Settings.
 
 == Frequently Asked Questions ==
 
-= How does drag-and-drop ordering work? =
+= How are product-specific tabs ordered? =
 
-Open Product data > Custom Tabs, drag a tab by its move handle, and update the product. The plugin reindexes the tab fields after every move and displays them in the same saved order on the storefront.
+Drag the tabs into the required order and update the product. Priority fields are managed automatically and are not shown in the editor.
 
-= How do tab priorities work? =
+= Can I add images and documents? =
 
-Lower numbers display first. WooCommerce normally uses 10 for Description, 20 for Additional information, and 30 for Reviews.
+Yes. Use the Add Media button above each tab editor to insert content from the WordPress Media Library.
 
 = Can I use shortcodes? =
 
@@ -71,10 +71,16 @@ No. Data is retained by default. To delete it during uninstall, define `WCT_DELE
 
 == Changelog ==
 
+= 1.2.0 =
+* Removed the product-tab priority field from the editor.
+* Product-specific tab order now follows drag-and-drop position.
+* Added WordPress rich-text Visual/Text editors.
+* Added WordPress Media Library support.
+* Redesigned and improved the Custom Tabs product editor interface.
+
 = 1.1.1 =
 * Updated author branding to Mahfuzar Rahman and webninjallc.com.
-* Improved drag-and-drop ordering feedback and reliable field reindexing.
-* Documented product-page tab ordering workflow.
+* Improved product-tab drag-and-drop ordering and editor feedback.
 
 = 1.1.0 =
 * Added responsive mobile accordion behavior.
