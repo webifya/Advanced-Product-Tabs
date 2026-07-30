@@ -86,7 +86,8 @@ final class WCT_Enhancements {
         ?>
         <div class="wrap wct-settings-wrap">
             <h1><?php esc_html_e( 'Product Tabs for WooCommerce', 'product-tabs-for-woocommerce' ); ?></h1>
-            <p><?php esc_html_e( 'Responsive display and default WooCommerce tab controls by Webifya.', 'product-tabs-for-woocommerce' ); ?></p>
+            <p><?php esc_html_e( 'Responsive display and WooCommerce product-tab controls by Mahfuzar Rahman.', 'product-tabs-for-woocommerce' ); ?></p>
+            <p><a href="https://webninjallc.com" target="_blank" rel="noopener noreferrer">webninjallc.com</a></p>
             <form method="post" action="options.php">
                 <?php settings_fields( 'wct_settings_group' ); ?>
                 <table class="form-table" role="presentation">
