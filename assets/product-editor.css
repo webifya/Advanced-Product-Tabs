@@ -1,0 +1,194 @@
+#wct_custom_tabs_panel {
+    box-sizing: border-box;
+    padding: 0 !important;
+    background: #f6f7f7;
+}
+
+#wct_custom_tabs_panel .wct-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 0;
+    padding: 18px 20px;
+    background: #fff;
+    border-bottom: 1px solid #dcdcde;
+}
+
+#wct_custom_tabs_panel .wct-panel-header p {
+    margin: 0;
+    color: #50575e;
+    font-size: 13px;
+}
+
+#wct_custom_tabs_panel .wct-tab-list {
+    display: grid;
+    gap: 14px;
+    padding: 18px 20px 22px;
+}
+
+#wct_custom_tabs_panel .wct-tab-row {
+    overflow: hidden;
+    margin: 0;
+    border: 1px solid #c3c4c7;
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .04);
+}
+
+#wct_custom_tabs_panel .wct-tab-row-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 28px;
+    padding: 12px 14px;
+    border-bottom: 1px solid #dcdcde;
+    background: #f6f7f7;
+}
+
+#wct_custom_tabs_panel .wct-drag {
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    color: #646970;
+    cursor: grab;
+    border-radius: 4px;
+}
+
+#wct_custom_tabs_panel .wct-drag:hover {
+    color: #2271b1;
+    background: #fff;
+}
+
+#wct_custom_tabs_panel .wct-is-dragging .wct-drag {
+    cursor: grabbing;
+}
+
+#wct_custom_tabs_panel .wct-row-title {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+#wct_custom_tabs_panel .wct-tab-fields {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 180px;
+    gap: 16px 20px;
+    padding: 18px;
+}
+
+#wct_custom_tabs_panel .wct-tab-fields > .form-field {
+    box-sizing: border-box;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Priority is controlled automatically by drag-and-drop order. */
+#wct_custom_tabs_panel .wct-tab-fields > .form-field:nth-of-type(2) {
+    display: none !important;
+}
+
+#wct_custom_tabs_panel .wct-tab-fields > .wct-content-field {
+    grid-column: 1 / -1;
+}
+
+#wct_custom_tabs_panel .wct-tab-fields > .form-field > label {
+    float: none !important;
+    display: block;
+    width: auto !important;
+    margin: 0 0 7px;
+    padding: 0;
+    font-weight: 600;
+}
+
+#wct_custom_tabs_panel .wct-tab-fields input[type="text"],
+#wct_custom_tabs_panel .wct-tab-fields input[type="number"],
+#wct_custom_tabs_panel .wct-tab-fields select,
+#wct_custom_tabs_panel .wct-tab-fields textarea {
+    box-sizing: border-box;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0;
+}
+
+#wct_custom_tabs_panel .wct-editor-media-row {
+    display: flex;
+    justify-content: flex-start;
+    margin: 0 0 8px;
+}
+
+#wct_custom_tabs_panel .wct-add-media .dashicons {
+    margin: 3px 5px 0 0;
+    font-size: 16px;
+}
+
+#wct_custom_tabs_panel .wp-editor-wrap {
+    width: 100%;
+    border-radius: 4px;
+}
+
+#wct_custom_tabs_panel .wp-editor-container {
+    border-color: #8c8f94;
+}
+
+#wct_custom_tabs_panel .mce-tinymce,
+#wct_custom_tabs_panel .mce-container,
+#wct_custom_tabs_panel .quicktags-toolbar {
+    box-sizing: border-box;
+}
+
+#wct_custom_tabs_panel .wct-sort-placeholder {
+    box-sizing: border-box;
+    min-height: 90px;
+    border: 2px dashed #72aee6;
+    border-radius: 6px;
+    background: #f0f6fc;
+}
+
+#wct_custom_tabs_panel .wct-tab-row.wct-is-dragging {
+    opacity: .72;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .16);
+}
+
+@media (max-width: 960px) {
+    #wct_custom_tabs_panel .wct-tab-fields {
+        grid-template-columns: 1fr;
+    }
+
+    #wct_custom_tabs_panel .wct-tab-fields > .wct-content-field {
+        grid-column: auto;
+    }
+}
+
+@media (max-width: 782px) {
+    #wct_custom_tabs_panel .wct-panel-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    #wct_custom_tabs_panel .wct-panel-header .button {
+        align-self: flex-start;
+    }
+
+    #wct_custom_tabs_panel .wct-tab-list {
+        padding: 12px;
+    }
+
+    #wct_custom_tabs_panel .wct-tab-row-bar {
+        flex-wrap: wrap;
+    }
+
+    #wct_custom_tabs_panel .wct-row-title {
+        width: calc(100% - 48px);
+        flex: none;
+    }
+
+    #wct_custom_tabs_panel .wct-tab-fields {
+        padding: 14px;
+    }
+}
