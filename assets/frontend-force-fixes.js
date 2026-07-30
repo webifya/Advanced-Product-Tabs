@@ -14,13 +14,23 @@
     }
 
     function addMarker(item, text) {
-        var marker = item.querySelector(':scope > .wct-hard-marker');
+        var marker = null;
+
+        Array.prototype.some.call(item.children, function (child) {
+            if (child.classList && child.classList.contains('wct-hard-marker')) {
+                marker = child;
+                return true;
+            }
+            return false;
+        });
+
         if (!marker) {
             marker = document.createElement('span');
             marker.className = 'wct-hard-marker';
             marker.setAttribute('aria-hidden', 'true');
             item.insertBefore(marker, item.firstChild);
         }
+
         marker.textContent = text;
         setImportant(marker, 'display', 'inline-block');
         setImportant(marker, 'position', 'absolute');
@@ -35,6 +45,7 @@
 
     function fixList(list) {
         var ordered = list.tagName.toLowerCase() === 'ol';
+
         setImportant(list, 'display', 'block');
         setImportant(list, 'width', '100%');
         setImportant(list, 'max-width', 'none');
@@ -57,6 +68,19 @@
         });
     }
 
+    function fixElement(element) {
+        setImportant(element, 'max-width', 'none');
+        setImportant(element, 'height', 'auto');
+        setImportant(element, 'margin-left', '0');
+        setImportant(element, 'margin-right', '0');
+        setImportant(element, 'position', 'static');
+        setImportant(element, 'left', 'auto');
+        setImportant(element, 'right', 'auto');
+        setImportant(element, 'transform', 'none');
+        setImportant(element, 'float', 'none');
+        setImportant(element, 'text-align', 'left');
+    }
+
     function fixWrapper(wrapper) {
         setImportant(wrapper, 'display', 'block');
         setImportant(wrapper, 'box-sizing', 'border-box');
@@ -73,28 +97,13 @@
         setImportant(wrapper, 'float', 'none');
         setImportant(wrapper, 'text-align', 'left');
 
-        wrapper.querySelectorAll('.section_wrapper, .container').forEach(function (element) {
-            setImportant(element, 'display', 'block');
-            setImportant(element, 'box-sizing', 'border-box');
-            setImportant(element, 'width', '100%');
-            setImportant(element, 'max-width', 'none');
-            setImportant(element, 'height', 'auto');
-            setImportant(element, 'margin', '0');
-            setImportant(element, 'padding-left', '0');
-            setImportant(element, 'padding-right', '0');
-            setImportant(element, 'position', 'static');
-            setImportant(element, 'left', 'auto');
-            setImportant(element, 'right', 'auto');
-            setImportant(element, 'transform', 'none');
-            setImportant(element, 'float', 'none');
-            setImportant(element, 'text-align', 'left');
-        });
-
+        Array.prototype.forEach.call(wrapper.children, fixElement);
+        wrapper.querySelectorAll('.section_wrapper, .container').forEach(fixElement);
         wrapper.querySelectorAll('ul, ol').forEach(fixList);
     }
 
     function run() {
-        document.querySelectorAll('.woocommerce-tabs .wct-tab-content[data-wct-content="1"]').forEach(fixWrapper);
+        document.querySelectorAll('.wct-tab-content[data-wct-content="1"]').forEach(fixWrapper);
     }
 
     function scheduleRun() {
@@ -102,6 +111,7 @@
             run();
             window.setTimeout(run, 50);
             window.setTimeout(run, 250);
+            window.setTimeout(run, 1000);
         });
     }
 
@@ -112,15 +122,14 @@
     }
 
     window.addEventListener('load', scheduleRun);
-    document.addEventListener('click', function (event) {
-        if (event.target.closest('.woocommerce-tabs .tabs a, .wct-accordion-title')) {
-            window.setTimeout(scheduleRun, 20);
-        }
+    document.addEventListener('click', function () {
+        window.setTimeout(scheduleRun, 20);
     });
 
     if ('MutationObserver' in window) {
-        new MutationObserver(function () {
-            scheduleRun();
-        }).observe(document.documentElement, { childList: true, subtree: true });
+        new MutationObserver(scheduleRun).observe(document.body || document.documentElement, {
+            childList: true,
+            subtree: true
+        });
     }
 }());
