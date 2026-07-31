@@ -12,8 +12,9 @@ Create responsive global and product-specific tabs for WooCommerce products.
 
 == Description ==
 
-Advanced Product Tabs by Mahfuzar Rahman adds a flexible product-tab manager for WooCommerce with responsive mobile behavior.
+Advanced Product Tabs by mahfuzar adds a flexible product-tab manager for WooCommerce with responsive mobile behavior.
 
+Developer: mahfuzar
 Plugin website: https://webninjallc.com
 
 Features:
@@ -77,6 +78,7 @@ No. Data is retained by default. To delete it during uninstall, define `WCT_DELE
 * Added the translation languages directory.
 * Removed development-only workflow files from the production plugin.
 * Updated author metadata to Mahfuzar Rahman.
+* Set the WordPress.org contributor and developer username to mahfuzar.
 
 = 1.3.1 =
 * Renamed the plugin to Advanced Product Tabs.
