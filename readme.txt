@@ -1,5 +1,5 @@
 === Advanced Product Tabs ===
-Contributors: webninja
+Contributors: mahfuzar
 Tags: woocommerce, product tabs, custom tabs, responsive tabs, accordion, rich text
 Requires at least: 6.4
 Tested up to: 7.0
@@ -12,7 +12,7 @@ Create responsive global and product-specific tabs for WooCommerce products.
 
 == Description ==
 
-Advanced Product Tabs by Web Ninja adds a flexible product-tab manager for WooCommerce with responsive mobile behavior.
+Advanced Product Tabs by Mahfuzar Rahman adds a flexible product-tab manager for WooCommerce with responsive mobile behavior.
 
 Plugin website: https://webninjallc.com
 
@@ -76,10 +76,11 @@ No. Data is retained by default. To delete it during uninstall, define `WCT_DELE
 * Corrected the stable tag to match the plugin version.
 * Added the translation languages directory.
 * Removed development-only workflow files from the production plugin.
+* Updated author metadata to Mahfuzar Rahman.
 
 = 1.3.1 =
 * Renamed the plugin to Advanced Product Tabs.
-* Updated author branding to Web Ninja.
+* Updated author branding.
 * Renamed the main plugin bootstrap file.
 * Updated the WordPress.org readme and plugin text domain.
 
