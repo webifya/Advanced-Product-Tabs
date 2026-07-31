@@ -23,6 +23,7 @@ define( 'WCT_FILE', __FILE__ );
 define( 'WCT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WCT_URL', plugin_dir_url( __FILE__ ) );
 
+require_once WCT_PATH . 'includes/class-wct-branding.php';
 require_once WCT_PATH . 'includes/class-wct-plugin.php';
 require_once WCT_PATH . 'includes/class-wct-enhancements.php';
 require_once WCT_PATH . 'includes/class-wct-product-extras.php';
@@ -35,6 +36,7 @@ register_activation_hook( __FILE__, array( 'WCT_Plugin', 'activate' ) );
 add_action(
     'plugins_loaded',
     static function () {
+        WCT_Branding::init();
         WCT_Plugin::instance();
         WCT_Enhancements::instance();
         WCT_Product_Extras::init();
