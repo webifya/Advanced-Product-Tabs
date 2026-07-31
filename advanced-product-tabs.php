@@ -4,7 +4,7 @@
  * Plugin URI: https://webninjallc.com
  * Description: Create responsive global and product-specific tabs for WooCommerce products, with rich-text content, media support, an icon gallery, mobile accordion behavior, and drag-and-drop ordering.
  * Version: 1.3.2
- * Author: Web Ninja
+ * Author: Mahfuzar Rahman
  * Author URI: https://profiles.wordpress.org/mahfuzar/
  * Text Domain: advanced-product-tabs
  * Domain Path: /languages
