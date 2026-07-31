@@ -2,9 +2,9 @@
 Contributors: webninja
 Tags: woocommerce, product tabs, custom tabs, responsive tabs, accordion, rich text
 Requires at least: 6.4
-Tested up to: 6.8
+Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -70,6 +70,12 @@ When enabled, WooCommerce product tabs become accessible accordion panels below 
 No. Data is retained by default. To delete it during uninstall, define `WCT_DELETE_DATA_ON_UNINSTALL` as `true` in wp-config.php before uninstalling.
 
 == Changelog ==
+
+= 1.3.2 =
+* Updated WordPress compatibility information.
+* Corrected the stable tag to match the plugin version.
+* Added the translation languages directory.
+* Removed development-only workflow files from the production plugin.
 
 = 1.3.1 =
 * Renamed the plugin to Advanced Product Tabs.
