@@ -1,10 +1,10 @@
-=== Product Tabs for WooCommerce ===
-Contributors: mahfuzarrahman
+=== Advanced Product Tabs ===
+Contributors: webninja
 Tags: woocommerce, product tabs, custom tabs, responsive tabs, accordion, rich text
 Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Create responsive global and product-specific tabs for WooCommerce products.
 
 == Description ==
 
-Product Tabs for WooCommerce by Mahfuzar Rahman adds a flexible product-tab manager with responsive mobile behavior.
+Advanced Product Tabs by Web Ninja adds a flexible product-tab manager for WooCommerce with responsive mobile behavior.
 
 Plugin website: https://webninjallc.com
 
@@ -29,7 +29,7 @@ Features:
 * Open or close the first accordion item by default.
 * Theme default, pill, and underline desktop styles.
 * Hide Description, Additional information, or Reviews globally.
-* Add icons or emojis before custom tab titles.
+* Add icons before custom tab titles using the built-in icon gallery.
 * Add custom CSS classes for advanced styling.
 * Show tabs to everyone, logged-in users, or guests only.
 * Supports safe HTML and WordPress shortcodes.
@@ -38,9 +38,9 @@ Features:
 
 == Installation ==
 
-1. Upload the plugin folder to `/wp-content/plugins/` or install the ZIP in WordPress.
+1. Upload the `advanced-product-tabs` folder to `/wp-content/plugins/`, or install the ZIP from WordPress.
 2. Activate WooCommerce.
-3. Activate Product Tabs for WooCommerce.
+3. Activate Advanced Product Tabs.
 4. Edit a product and open Product data > Custom Tabs.
 5. Add tabs, write content using the Visual/Text editor, and drag tabs into the required order.
 6. Update the product to save the content and order.
@@ -71,23 +71,26 @@ No. Data is retained by default. To delete it during uninstall, define `WCT_DELE
 
 == Changelog ==
 
+= 1.3.1 =
+* Renamed the plugin to Advanced Product Tabs.
+* Updated author branding to Web Ninja.
+* Renamed the main plugin bootstrap file.
+* Updated the WordPress.org readme and plugin text domain.
+
+= 1.3.0 =
+* Added accordion behavior to the product-tab editor.
+* Added improved storefront tab and content styling.
+
+= 1.2.9 =
+* Added Betheme product-tab compatibility.
+* Polished editor buttons, dividers, cards, and form controls.
+
 = 1.2.0 =
 * Removed the product-tab priority field from the editor.
 * Product-specific tab order now follows drag-and-drop position.
 * Added WordPress rich-text Visual/Text editors.
 * Added WordPress Media Library support.
 * Redesigned and improved the Custom Tabs product editor interface.
-
-= 1.1.1 =
-* Updated author branding to Mahfuzar Rahman and webninjallc.com.
-* Improved product-tab drag-and-drop ordering and editor feedback.
-
-= 1.1.0 =
-* Added responsive mobile accordion behavior.
-* Added configurable breakpoint and first-panel state.
-* Added desktop pill and underline styles.
-* Added default WooCommerce tab visibility controls.
-* Added icons, custom classes, and login-based visibility.
 
 = 1.0.0 =
 * Initial release.
