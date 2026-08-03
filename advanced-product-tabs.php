@@ -3,7 +3,7 @@
  * Plugin Name: Advanced Product Tabs
  * Plugin URI: https://webninjallc.com
  * Description: Create responsive global and product-specific tabs for WooCommerce products, with rich-text content, media support, an icon gallery, mobile accordion behavior, and drag-and-drop ordering.
- * Version: 1.3.2
+ * Version: 3.0.0-beta.1
  * Author: Mahfuzar Rahman
  * Author URI: https://profiles.wordpress.org/mahfuzar/
  * Text Domain: advanced-product-tabs
@@ -18,7 +18,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WCT_VERSION', '1.3.2' );
+define( 'WCT_VERSION', '3.0.0-beta.1' );
 define( 'WCT_FILE', __FILE__ );
 define( 'WCT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WCT_URL', plugin_dir_url( __FILE__ ) );
@@ -30,6 +30,7 @@ require_once WCT_PATH . 'includes/class-wct-product-extras.php';
 require_once WCT_PATH . 'includes/class-wct-rich-editor.php';
 require_once WCT_PATH . 'includes/class-wct-icon-renderer.php';
 require_once WCT_PATH . 'includes/class-wct-frontend-content.php';
+require_once WCT_PATH . 'includes/class-wct-wxr-import.php';
 
 register_activation_hook( __FILE__, array( 'WCT_Plugin', 'activate' ) );
 
@@ -43,5 +44,6 @@ add_action(
         WCT_Rich_Editor::init();
         WCT_Icon_Renderer::init();
         WCT_Frontend_Content::init();
+        WCT_WXR_Import::init();
     }
 );
