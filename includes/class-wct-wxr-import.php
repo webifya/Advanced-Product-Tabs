@@ -5,10 +5,9 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Completes media hydration for products imported through Tools > Import > WordPress.
  *
- * The WXR package can provide remote media URLs in temporary product meta. WordPress
- * imports the product and plugin metadata normally; this class then copies the remote
- * files into the Media Library, assigns featured/gallery images, and rewrites remote
- * URLs found inside Advanced Product Tabs data.
+ * Product records are imported first. Remote media is then processed one product at a
+ * time through WooCommerce Action Scheduler, with WP-Cron as a fallback. Keeping image
+ * downloads outside the WXR request prevents import timeouts and HTTP 500 errors.
  */
 final class WCT_WXR_Import {
     private const FEATURED_META = '_apt_import_featured_image_url';
@@ -16,13 +15,35 @@ final class WCT_WXR_Import {
     private const EMBEDDED_META = '_apt_import_embedded_media_urls';
     private const SOURCE_META   = '_apt_source_url';
     private const ERROR_META    = '_apt_import_media_errors';
+    private const QUEUED_META   = '_apt_import_media_queued';
+    private const ATTEMPTS_META = '_apt_import_media_attempts';
+    private const ACTION_HOOK   = 'wct_process_wxr_product_media';
+    private const ACTION_GROUP  = 'advanced-product-tabs-import';
+    private const MAX_ATTEMPTS  = 3;
 
     public static function init(): void {
-        add_action( 'import_end', array( __CLASS__, 'hydrate_imported_products' ), 20 );
+        add_action( 'import_end', array( __CLASS__, 'queue_imported_products' ), 20 );
+        add_action( 'admin_init', array( __CLASS__, 'maybe_queue_pending_products' ) );
+        add_action( self::ACTION_HOOK, array( __CLASS__, 'process_product' ), 10, 1 );
     }
 
-    public static function hydrate_imported_products(): void {
-        if ( ! current_user_can( 'upload_files' ) || ! function_exists( 'wc_get_product' ) ) {
+    /**
+     * Recover a partially completed/failed import when an administrator next loads wp-admin.
+     */
+    public static function maybe_queue_pending_products(): void {
+        if ( ! current_user_can( 'upload_files' ) || get_transient( 'apt_wxr_queue_lock' ) ) {
+            return;
+        }
+
+        set_transient( 'apt_wxr_queue_lock', 1, MINUTE_IN_SECONDS );
+        self::queue_imported_products();
+    }
+
+    /**
+     * Queue products containing temporary WXR media metadata. No remote request is made here.
+     */
+    public static function queue_imported_products(): void {
+        if ( ! function_exists( 'wc_get_product' ) ) {
             return;
         }
 
@@ -53,16 +74,93 @@ final class WCT_WXR_Import {
             )
         );
 
+        $delay = 0;
         foreach ( $product_ids as $product_id ) {
-            self::hydrate_product( (int) $product_id );
+            $product_id = (int) $product_id;
+            $attempts   = absint( get_post_meta( $product_id, self::ATTEMPTS_META, true ) );
+
+            if ( $attempts >= self::MAX_ATTEMPTS || get_post_meta( $product_id, self::QUEUED_META, true ) ) {
+                continue;
+            }
+
+            self::schedule_product( $product_id, $delay );
+            $delay += 5;
         }
     }
 
-    private static function hydrate_product( int $product_id ): void {
+    private static function schedule_product( int $product_id, int $delay = 0 ): void {
+        update_post_meta( $product_id, self::QUEUED_META, time() );
+
+        if ( 0 === $delay && function_exists( 'as_enqueue_async_action' ) ) {
+            $action_id = as_enqueue_async_action(
+                self::ACTION_HOOK,
+                array( 'product_id' => $product_id ),
+                self::ACTION_GROUP
+            );
+
+            if ( $action_id ) {
+                return;
+            }
+        }
+
+        if ( function_exists( 'as_schedule_single_action' ) ) {
+            $action_id = as_schedule_single_action(
+                time() + max( 1, $delay ),
+                self::ACTION_HOOK,
+                array( 'product_id' => $product_id ),
+                self::ACTION_GROUP,
+                true
+            );
+
+            if ( $action_id ) {
+                return;
+            }
+        }
+
+        $args = array( $product_id );
+        if ( ! wp_next_scheduled( self::ACTION_HOOK, $args ) ) {
+            $scheduled = wp_schedule_single_event( time() + max( 5, $delay ), self::ACTION_HOOK, $args );
+            if ( false !== $scheduled && ! is_wp_error( $scheduled ) ) {
+                return;
+            }
+        }
+
+        delete_post_meta( $product_id, self::QUEUED_META );
+    }
+
+    /**
+     * Process one product in its own background request.
+     */
+    public static function process_product( $product_id ): void {
+        $product_id = absint( $product_id );
+        if ( ! $product_id || ! function_exists( 'wc_get_product' ) ) {
+            return;
+        }
+
+        delete_post_meta( $product_id, self::QUEUED_META );
+        $attempts = absint( get_post_meta( $product_id, self::ATTEMPTS_META, true ) ) + 1;
+        update_post_meta( $product_id, self::ATTEMPTS_META, $attempts );
+
+        $errors = self::hydrate_product( $product_id );
+
+        if ( ! $errors ) {
+            delete_post_meta( $product_id, self::ATTEMPTS_META );
+            return;
+        }
+
+        if ( $attempts < self::MAX_ATTEMPTS ) {
+            self::schedule_product( $product_id, $attempts * 5 * MINUTE_IN_SECONDS );
+        }
+    }
+
+    /**
+     * @return array<string,string> Import errors keyed by remote URL.
+     */
+    private static function hydrate_product( int $product_id ): array {
         $product = wc_get_product( $product_id );
 
         if ( ! $product ) {
-            return;
+            return array();
         }
 
         $errors  = array();
@@ -85,7 +183,7 @@ final class WCT_WXR_Import {
 
         $gallery_urls = self::normalize_url_list( get_post_meta( $product_id, self::GALLERY_META, true ) );
         if ( $gallery_urls ) {
-            $gallery_ids   = array();
+            $gallery_ids    = array();
             $failed_gallery = array();
 
             foreach ( $gallery_urls as $gallery_url ) {
@@ -114,7 +212,7 @@ final class WCT_WXR_Import {
             }
         }
 
-        $embedded_urls  = self::normalize_url_list( get_post_meta( $product_id, self::EMBEDDED_META, true ) );
+        $embedded_urls   = self::normalize_url_list( get_post_meta( $product_id, self::EMBEDDED_META, true ) );
         $failed_embedded = array();
 
         foreach ( $embedded_urls as $embedded_url ) {
@@ -152,6 +250,7 @@ final class WCT_WXR_Import {
         }
 
         $product->save();
+        return $errors;
     }
 
     private static function rewrite_product_content( int $product_id, array $url_map ): void {
@@ -245,7 +344,7 @@ final class WCT_WXR_Import {
         require_once ABSPATH . 'wp-admin/includes/media.php';
         require_once ABSPATH . 'wp-admin/includes/image.php';
 
-        $temporary_file = download_url( $url, 60 );
+        $temporary_file = download_url( $url, 45 );
         if ( is_wp_error( $temporary_file ) ) {
             return $temporary_file;
         }
@@ -268,7 +367,6 @@ final class WCT_WXR_Import {
         }
 
         update_post_meta( $attachment_id, self::SOURCE_META, $url );
-
         return (int) $attachment_id;
     }
 }
