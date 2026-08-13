@@ -1,0 +1,42 @@
+name: Deploy to WordPress.org SVN
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wordpress-org-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy plugin
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout release tag
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate release version
+        shell: bash
+        run: |
+          set -euo pipefail
+          plugin_version=$(sed -n 's/^ \* Version: //p' advanced-product-tabs.php | head -n 1 | tr -d '\r')
+          stable_tag=$(sed -n 's/^Stable tag: //p' readme.txt | head -n 1 | tr -d '\r')
+          if [[ "${GITHUB_REF_NAME}" != "${plugin_version}" || "${GITHUB_REF_NAME}" != "${stable_tag}" ]]; then
+            echo "Release tag, plugin version, and Stable tag must match."
+            exit 1
+          fi
+
+      - name: Deploy to WordPress.org
+        uses: 10up/action-wordpress-plugin-deploy@stable
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SLUG: advanced-product-tabs

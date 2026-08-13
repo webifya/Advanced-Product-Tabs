@@ -30,8 +30,8 @@ final class WCT_Enhancements {
     public function add_settings_page(): void {
         add_submenu_page(
             'woocommerce',
-            __( 'Product Tabs Settings', 'product-tabs-for-woocommerce' ),
-            __( 'Tab Settings', 'product-tabs-for-woocommerce' ),
+            __( 'Product Tabs Settings', 'advanced-product-tabs' ),
+            __( 'Tab Settings', 'advanced-product-tabs' ),
             'manage_woocommerce',
             'wct-settings',
             array( $this, 'render_settings_page' )
@@ -85,40 +85,40 @@ final class WCT_Enhancements {
         $settings = $this->settings();
         ?>
         <div class="wrap wct-settings-wrap">
-            <h1><?php esc_html_e( 'Product Tabs for WooCommerce', 'product-tabs-for-woocommerce' ); ?></h1>
-            <p><?php esc_html_e( 'Responsive display and WooCommerce product-tab controls by Mahfuzar Rahman.', 'product-tabs-for-woocommerce' ); ?></p>
+            <h1><?php esc_html_e( 'Product Tabs for WooCommerce', 'advanced-product-tabs' ); ?></h1>
+            <p><?php esc_html_e( 'Responsive display and WooCommerce product-tab controls by Mahfuzar Rahman.', 'advanced-product-tabs' ); ?></p>
             <p><a href="https://webninjallc.com" target="_blank" rel="noopener noreferrer">webninjallc.com</a></p>
             <form method="post" action="options.php">
                 <?php settings_fields( 'wct_settings_group' ); ?>
                 <table class="form-table" role="presentation">
                     <tr>
-                        <th scope="row"><?php esc_html_e( 'Mobile accordion', 'product-tabs-for-woocommerce' ); ?></th>
-                        <td><label><input type="checkbox" name="wct_settings[mobile_accordion]" value="1" <?php checked( $settings['mobile_accordion'] ); ?>> <?php esc_html_e( 'Convert product tabs into an accordion on smaller screens.', 'product-tabs-for-woocommerce' ); ?></label></td>
+                        <th scope="row"><?php esc_html_e( 'Mobile accordion', 'advanced-product-tabs' ); ?></th>
+                        <td><label><input type="checkbox" name="wct_settings[mobile_accordion]" value="1" <?php checked( $settings['mobile_accordion'] ); ?>> <?php esc_html_e( 'Convert product tabs into an accordion on smaller screens.', 'advanced-product-tabs' ); ?></label></td>
                     </tr>
                     <tr>
-                        <th scope="row"><label for="wct-breakpoint"><?php esc_html_e( 'Mobile breakpoint', 'product-tabs-for-woocommerce' ); ?></label></th>
+                        <th scope="row"><label for="wct-breakpoint"><?php esc_html_e( 'Mobile breakpoint', 'advanced-product-tabs' ); ?></label></th>
                         <td><input id="wct-breakpoint" type="number" min="320" max="1200" name="wct_settings[breakpoint]" value="<?php echo esc_attr( $settings['breakpoint'] ); ?>"> px</td>
                     </tr>
                     <tr>
-                        <th scope="row"><?php esc_html_e( 'Accordion state', 'product-tabs-for-woocommerce' ); ?></th>
-                        <td><label><input type="checkbox" name="wct_settings[open_first]" value="1" <?php checked( $settings['open_first'] ); ?>> <?php esc_html_e( 'Open the first tab by default.', 'product-tabs-for-woocommerce' ); ?></label></td>
+                        <th scope="row"><?php esc_html_e( 'Accordion state', 'advanced-product-tabs' ); ?></th>
+                        <td><label><input type="checkbox" name="wct_settings[open_first]" value="1" <?php checked( $settings['open_first'] ); ?>> <?php esc_html_e( 'Open the first tab by default.', 'advanced-product-tabs' ); ?></label></td>
                     </tr>
                     <tr>
-                        <th scope="row"><label for="wct-tab-style"><?php esc_html_e( 'Desktop style', 'product-tabs-for-woocommerce' ); ?></label></th>
+                        <th scope="row"><label for="wct-tab-style"><?php esc_html_e( 'Desktop style', 'advanced-product-tabs' ); ?></label></th>
                         <td>
                             <select id="wct-tab-style" name="wct_settings[tab_style]">
-                                <option value="default" <?php selected( $settings['tab_style'], 'default' ); ?>><?php esc_html_e( 'Theme default', 'product-tabs-for-woocommerce' ); ?></option>
-                                <option value="pills" <?php selected( $settings['tab_style'], 'pills' ); ?>><?php esc_html_e( 'Pills', 'product-tabs-for-woocommerce' ); ?></option>
-                                <option value="underline" <?php selected( $settings['tab_style'], 'underline' ); ?>><?php esc_html_e( 'Underline', 'product-tabs-for-woocommerce' ); ?></option>
+                                <option value="default" <?php selected( $settings['tab_style'], 'default' ); ?>><?php esc_html_e( 'Theme default', 'advanced-product-tabs' ); ?></option>
+                                <option value="pills" <?php selected( $settings['tab_style'], 'pills' ); ?>><?php esc_html_e( 'Pills', 'advanced-product-tabs' ); ?></option>
+                                <option value="underline" <?php selected( $settings['tab_style'], 'underline' ); ?>><?php esc_html_e( 'Underline', 'advanced-product-tabs' ); ?></option>
                             </select>
                         </td>
                     </tr>
                     <tr>
-                        <th scope="row"><?php esc_html_e( 'Default tabs', 'product-tabs-for-woocommerce' ); ?></th>
+                        <th scope="row"><?php esc_html_e( 'Default tabs', 'advanced-product-tabs' ); ?></th>
                         <td>
-                            <label><input type="checkbox" name="wct_settings[hide_description]" value="1" <?php checked( $settings['hide_description'] ); ?>> <?php esc_html_e( 'Hide Description', 'product-tabs-for-woocommerce' ); ?></label><br>
-                            <label><input type="checkbox" name="wct_settings[hide_additional]" value="1" <?php checked( $settings['hide_additional'] ); ?>> <?php esc_html_e( 'Hide Additional information', 'product-tabs-for-woocommerce' ); ?></label><br>
-                            <label><input type="checkbox" name="wct_settings[hide_reviews]" value="1" <?php checked( $settings['hide_reviews'] ); ?>> <?php esc_html_e( 'Hide Reviews', 'product-tabs-for-woocommerce' ); ?></label>
+                            <label><input type="checkbox" name="wct_settings[hide_description]" value="1" <?php checked( $settings['hide_description'] ); ?>> <?php esc_html_e( 'Hide Description', 'advanced-product-tabs' ); ?></label><br>
+                            <label><input type="checkbox" name="wct_settings[hide_additional]" value="1" <?php checked( $settings['hide_additional'] ); ?>> <?php esc_html_e( 'Hide Additional information', 'advanced-product-tabs' ); ?></label><br>
+                            <label><input type="checkbox" name="wct_settings[hide_reviews]" value="1" <?php checked( $settings['hide_reviews'] ); ?>> <?php esc_html_e( 'Hide Reviews', 'advanced-product-tabs' ); ?></label>
                         </td>
                     </tr>
                 </table>
@@ -231,7 +231,7 @@ final class WCT_Enhancements {
     public function add_global_display_meta_box(): void {
         add_meta_box(
             'wct-global-display',
-            __( 'Display Options', 'product-tabs-for-woocommerce' ),
+            __( 'Display Options', 'advanced-product-tabs' ),
             array( $this, 'render_global_display_meta_box' ),
             'wct_global_tab',
             'side',
@@ -245,13 +245,13 @@ final class WCT_Enhancements {
         $class = get_post_meta( $post->ID, '_wct_css_class', true );
         $visibility = get_post_meta( $post->ID, '_wct_visibility', true ) ?: 'all';
         ?>
-        <p><label for="wct-icon"><strong><?php esc_html_e( 'Icon or emoji', 'product-tabs-for-woocommerce' ); ?></strong></label><br><input id="wct-icon" type="text" class="widefat" name="wct_icon" value="<?php echo esc_attr( $icon ); ?>" placeholder="✓"></p>
-        <p><label for="wct-css-class"><strong><?php esc_html_e( 'Custom CSS class', 'product-tabs-for-woocommerce' ); ?></strong></label><br><input id="wct-css-class" type="text" class="widefat" name="wct_css_class" value="<?php echo esc_attr( $class ); ?>"></p>
-        <p><label for="wct-visibility"><strong><?php esc_html_e( 'Visibility', 'product-tabs-for-woocommerce' ); ?></strong></label><br>
+        <p><label for="wct-icon"><strong><?php esc_html_e( 'Icon or emoji', 'advanced-product-tabs' ); ?></strong></label><br><input id="wct-icon" type="text" class="widefat" name="wct_icon" value="<?php echo esc_attr( $icon ); ?>" placeholder="✓"></p>
+        <p><label for="wct-css-class"><strong><?php esc_html_e( 'Custom CSS class', 'advanced-product-tabs' ); ?></strong></label><br><input id="wct-css-class" type="text" class="widefat" name="wct_css_class" value="<?php echo esc_attr( $class ); ?>"></p>
+        <p><label for="wct-visibility"><strong><?php esc_html_e( 'Visibility', 'advanced-product-tabs' ); ?></strong></label><br>
             <select id="wct-visibility" class="widefat" name="wct_visibility">
-                <option value="all" <?php selected( $visibility, 'all' ); ?>><?php esc_html_e( 'Everyone', 'product-tabs-for-woocommerce' ); ?></option>
-                <option value="logged_in" <?php selected( $visibility, 'logged_in' ); ?>><?php esc_html_e( 'Logged-in users', 'product-tabs-for-woocommerce' ); ?></option>
-                <option value="logged_out" <?php selected( $visibility, 'logged_out' ); ?>><?php esc_html_e( 'Guests only', 'product-tabs-for-woocommerce' ); ?></option>
+                <option value="all" <?php selected( $visibility, 'all' ); ?>><?php esc_html_e( 'Everyone', 'advanced-product-tabs' ); ?></option>
+                <option value="logged_in" <?php selected( $visibility, 'logged_in' ); ?>><?php esc_html_e( 'Logged-in users', 'advanced-product-tabs' ); ?></option>
+                <option value="logged_out" <?php selected( $visibility, 'logged_out' ); ?>><?php esc_html_e( 'Guests only', 'advanced-product-tabs' ); ?></option>
             </select>
         </p>
         <?php

@@ -44,8 +44,8 @@ final class WCT_Rich_Editor {
             'wct-product-editor',
             'wctEditorSettings',
             array(
-                'mediaTitle'  => __( 'Insert media into product tab', 'product-tabs-for-woocommerce' ),
-                'mediaButton' => __( 'Insert into tab', 'product-tabs-for-woocommerce' ),
+                'mediaTitle'  => __( 'Insert media into product tab', 'advanced-product-tabs' ),
+                'mediaButton' => __( 'Insert into tab', 'advanced-product-tabs' ),
             )
         );
     }

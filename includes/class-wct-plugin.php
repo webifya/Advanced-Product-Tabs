@@ -36,7 +36,7 @@ final class WCT_Plugin {
     public static function activate(): void {
         if ( ! class_exists( 'WooCommerce' ) ) {
             deactivate_plugins( plugin_basename( WCT_FILE ) );
-            wp_die( esc_html__( 'WooCommerce Custom Tabs requires WooCommerce to be installed and active.', 'woocommerce-custom-tabs' ) );
+            wp_die( esc_html__( 'WooCommerce Custom Tabs requires WooCommerce to be installed and active.', 'advanced-product-tabs' ) );
         }
         self::instance()->register_global_tab_type();
         flush_rewrite_rules();
@@ -49,12 +49,12 @@ final class WCT_Plugin {
     }
 
     public function load_textdomain(): void {
-        load_plugin_textdomain( 'woocommerce-custom-tabs', false, dirname( plugin_basename( WCT_FILE ) ) . '/languages' );
+        load_plugin_textdomain( 'advanced-product-tabs', false, dirname( plugin_basename( WCT_FILE ) ) . '/languages' );
     }
 
     public function woocommerce_missing_notice(): void {
         if ( current_user_can( 'activate_plugins' ) ) {
-            echo '<div class="notice notice-error"><p>' . esc_html__( 'WooCommerce Custom Tabs requires WooCommerce to be installed and active.', 'woocommerce-custom-tabs' ) . '</p></div>';
+            echo '<div class="notice notice-error"><p>' . esc_html__( 'WooCommerce Custom Tabs requires WooCommerce to be installed and active.', 'advanced-product-tabs' ) . '</p></div>';
         }
     }
 
@@ -63,10 +63,10 @@ final class WCT_Plugin {
             'wct_global_tab',
             array(
                 'labels' => array(
-                    'name'          => __( 'Product Tabs', 'woocommerce-custom-tabs' ),
-                    'singular_name' => __( 'Product Tab', 'woocommerce-custom-tabs' ),
-                    'add_new_item'  => __( 'Add New Product Tab', 'woocommerce-custom-tabs' ),
-                    'edit_item'     => __( 'Edit Product Tab', 'woocommerce-custom-tabs' ),
+                    'name'          => __( 'Product Tabs', 'advanced-product-tabs' ),
+                    'singular_name' => __( 'Product Tab', 'advanced-product-tabs' ),
+                    'add_new_item'  => __( 'Add New Product Tab', 'advanced-product-tabs' ),
+                    'edit_item'     => __( 'Edit Product Tab', 'advanced-product-tabs' ),
                 ),
                 'public'              => false,
                 'show_ui'             => true,
@@ -83,7 +83,7 @@ final class WCT_Plugin {
 
     public function add_product_data_tab( array $tabs ): array {
         $tabs['wct_custom_tabs'] = array(
-            'label'    => __( 'Custom Tabs', 'woocommerce-custom-tabs' ),
+            'label'    => __( 'Custom Tabs', 'advanced-product-tabs' ),
             'target'   => 'wct_custom_tabs_panel',
             'class'    => array(),
             'priority' => 85,
@@ -99,8 +99,8 @@ final class WCT_Plugin {
         ?>
         <div id="wct_custom_tabs_panel" class="panel woocommerce_options_panel hidden">
             <div class="wct-panel-header">
-                <p><?php esc_html_e( 'Create tabs that appear only on this product. Drag rows to reorder them.', 'woocommerce-custom-tabs' ); ?></p>
-                <button type="button" class="button button-primary wct-add-tab"><?php esc_html_e( 'Add Tab', 'woocommerce-custom-tabs' ); ?></button>
+                <p><?php esc_html_e( 'Create tabs that appear only on this product. Drag rows to reorder them.', 'advanced-product-tabs' ); ?></p>
+                <button type="button" class="button button-primary wct-add-tab"><?php esc_html_e( 'Add Tab', 'advanced-product-tabs' ); ?></button>
             </div>
             <div class="wct-tab-list">
                 <?php foreach ( $tabs as $index => $tab ) : ?>
@@ -123,26 +123,26 @@ final class WCT_Plugin {
         <div class="wct-tab-row">
             <div class="wct-tab-row-bar">
                 <span class="dashicons dashicons-move wct-drag"></span>
-                <strong class="wct-row-title"><?php echo esc_html( $title ?: __( 'New Tab', 'woocommerce-custom-tabs' ) ); ?></strong>
-                <button type="button" class="button-link wct-toggle"><?php esc_html_e( 'Expand/Collapse', 'woocommerce-custom-tabs' ); ?></button>
-                <button type="button" class="button-link-delete wct-remove"><?php esc_html_e( 'Remove', 'woocommerce-custom-tabs' ); ?></button>
+                <strong class="wct-row-title"><?php echo esc_html( $title ?: __( 'New Tab', 'advanced-product-tabs' ) ); ?></strong>
+                <button type="button" class="button-link wct-toggle"><?php esc_html_e( 'Expand/Collapse', 'advanced-product-tabs' ); ?></button>
+                <button type="button" class="button-link-delete wct-remove"><?php esc_html_e( 'Remove', 'advanced-product-tabs' ); ?></button>
             </div>
             <div class="wct-tab-fields">
                 <p class="form-field">
-                    <label><?php esc_html_e( 'Tab title', 'woocommerce-custom-tabs' ); ?></label>
+                    <label><?php esc_html_e( 'Tab title', 'advanced-product-tabs' ); ?></label>
                     <input type="text" class="wct-title" name="wct_tabs[<?php echo esc_attr( $index ); ?>][title]" value="<?php echo esc_attr( $title ); ?>">
                 </p>
                 <p class="form-field">
-                    <label><?php esc_html_e( 'Priority', 'woocommerce-custom-tabs' ); ?></label>
+                    <label><?php esc_html_e( 'Priority', 'advanced-product-tabs' ); ?></label>
                     <input type="number" min="1" max="999" name="wct_tabs[<?php echo esc_attr( $index ); ?>][priority]" value="<?php echo esc_attr( $priority ); ?>">
-                    <span class="description"><?php esc_html_e( 'Lower numbers appear first. Description is normally 10, Additional information 20, Reviews 30.', 'woocommerce-custom-tabs' ); ?></span>
+                    <span class="description"><?php esc_html_e( 'Lower numbers appear first. Description is normally 10, Additional information 20, Reviews 30.', 'advanced-product-tabs' ); ?></span>
                 </p>
                 <p class="form-field wct-content-field">
-                    <label><?php esc_html_e( 'Content', 'woocommerce-custom-tabs' ); ?></label>
-                    <textarea rows="8" name="wct_tabs[<?php echo esc_attr( $index ); ?>][content]" placeholder="<?php esc_attr_e( 'HTML and shortcodes are supported.', 'woocommerce-custom-tabs' ); ?>"><?php echo esc_textarea( $content ); ?></textarea>
+                    <label><?php esc_html_e( 'Content', 'advanced-product-tabs' ); ?></label>
+                    <textarea rows="8" name="wct_tabs[<?php echo esc_attr( $index ); ?>][content]" placeholder="<?php esc_attr_e( 'HTML and shortcodes are supported.', 'advanced-product-tabs' ); ?>"><?php echo esc_textarea( $content ); ?></textarea>
                 </p>
                 <p class="form-field">
-                    <label><?php esc_html_e( 'Enabled', 'woocommerce-custom-tabs' ); ?></label>
+                    <label><?php esc_html_e( 'Enabled', 'advanced-product-tabs' ); ?></label>
                     <input type="hidden" name="wct_tabs[<?php echo esc_attr( $index ); ?>][enabled]" value="0">
                     <input type="checkbox" name="wct_tabs[<?php echo esc_attr( $index ); ?>][enabled]" value="1" <?php checked( $enabled ); ?>>
                 </p>
@@ -258,7 +258,7 @@ final class WCT_Plugin {
     }
 
     public function add_global_tab_meta_box(): void {
-        add_meta_box( 'wct_assignment', __( 'Tab Display Settings', 'woocommerce-custom-tabs' ), array( $this, 'render_global_tab_meta_box' ), 'wct_global_tab', 'side', 'default' );
+        add_meta_box( 'wct_assignment', __( 'Tab Display Settings', 'advanced-product-tabs' ), array( $this, 'render_global_tab_meta_box' ), 'wct_global_tab', 'side', 'default' );
     }
 
     public function render_global_tab_meta_box( WP_Post $post ): void {
@@ -267,17 +267,17 @@ final class WCT_Plugin {
         $ids      = implode( ',', array_filter( array_map( 'absint', (array) get_post_meta( $post->ID, '_wct_assignment_ids', true ) ) ) );
         $priority = absint( get_post_meta( $post->ID, '_wct_priority', true ) ?: 50 );
         ?>
-        <p><label for="wct_scope"><strong><?php esc_html_e( 'Display on', 'woocommerce-custom-tabs' ); ?></strong></label></p>
+        <p><label for="wct_scope"><strong><?php esc_html_e( 'Display on', 'advanced-product-tabs' ); ?></strong></label></p>
         <select name="wct_scope" id="wct_scope" class="widefat">
-            <option value="all" <?php selected( $scope, 'all' ); ?>><?php esc_html_e( 'All products', 'woocommerce-custom-tabs' ); ?></option>
-            <option value="products" <?php selected( $scope, 'products' ); ?>><?php esc_html_e( 'Selected product IDs', 'woocommerce-custom-tabs' ); ?></option>
-            <option value="categories" <?php selected( $scope, 'categories' ); ?>><?php esc_html_e( 'Selected category IDs', 'woocommerce-custom-tabs' ); ?></option>
-            <option value="tags" <?php selected( $scope, 'tags' ); ?>><?php esc_html_e( 'Selected tag IDs', 'woocommerce-custom-tabs' ); ?></option>
+            <option value="all" <?php selected( $scope, 'all' ); ?>><?php esc_html_e( 'All products', 'advanced-product-tabs' ); ?></option>
+            <option value="products" <?php selected( $scope, 'products' ); ?>><?php esc_html_e( 'Selected product IDs', 'advanced-product-tabs' ); ?></option>
+            <option value="categories" <?php selected( $scope, 'categories' ); ?>><?php esc_html_e( 'Selected category IDs', 'advanced-product-tabs' ); ?></option>
+            <option value="tags" <?php selected( $scope, 'tags' ); ?>><?php esc_html_e( 'Selected tag IDs', 'advanced-product-tabs' ); ?></option>
         </select>
-        <p><label for="wct_assignment_ids"><strong><?php esc_html_e( 'Assignment IDs', 'woocommerce-custom-tabs' ); ?></strong></label></p>
+        <p><label for="wct_assignment_ids"><strong><?php esc_html_e( 'Assignment IDs', 'advanced-product-tabs' ); ?></strong></label></p>
         <input type="text" class="widefat" id="wct_assignment_ids" name="wct_assignment_ids" value="<?php echo esc_attr( $ids ); ?>" placeholder="12, 34, 56">
-        <p class="description"><?php esc_html_e( 'Enter comma-separated product, category, or tag IDs. Ignored when displaying on all products.', 'woocommerce-custom-tabs' ); ?></p>
-        <p><label for="wct_priority"><strong><?php esc_html_e( 'Priority', 'woocommerce-custom-tabs' ); ?></strong></label></p>
+        <p class="description"><?php esc_html_e( 'Enter comma-separated product, category, or tag IDs. Ignored when displaying on all products.', 'advanced-product-tabs' ); ?></p>
+        <p><label for="wct_priority"><strong><?php esc_html_e( 'Priority', 'advanced-product-tabs' ); ?></strong></label></p>
         <input type="number" class="widefat" min="1" max="999" id="wct_priority" name="wct_priority" value="<?php echo esc_attr( $priority ); ?>">
         <?php
     }
@@ -297,15 +297,15 @@ final class WCT_Plugin {
         $scope   = in_array( $scope, $allowed, true ) ? $scope : 'all';
         $ids_raw = isset( $_POST['wct_assignment_ids'] ) ? sanitize_text_field( wp_unslash( $_POST['wct_assignment_ids'] ) ) : '';
         $ids     = array_values( array_unique( array_filter( array_map( 'absint', preg_split( '/\s*,\s*/', $ids_raw ) ) ) ) );
-        $priority = isset( $_POST['wct_priority'] ) ? max( 1, min( 999, absint( $_POST['wct_priority'] ) ) ) : 50;
+        $priority = isset( $_POST['wct_priority'] ) ? max( 1, min( 999, absint( wp_unslash( $_POST['wct_priority'] ) ) ) ) : 50;
         update_post_meta( $post_id, '_wct_scope', $scope );
         update_post_meta( $post_id, '_wct_assignment_ids', $ids );
         update_post_meta( $post_id, '_wct_priority', $priority );
     }
 
     public function global_tab_columns( array $columns ): array {
-        $columns['wct_scope']    = __( 'Display', 'woocommerce-custom-tabs' );
-        $columns['wct_priority'] = __( 'Priority', 'woocommerce-custom-tabs' );
+        $columns['wct_scope']    = __( 'Display', 'advanced-product-tabs' );
+        $columns['wct_priority'] = __( 'Priority', 'advanced-product-tabs' );
         return $columns;
     }
 

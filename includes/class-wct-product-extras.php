@@ -39,7 +39,7 @@ final class WCT_Product_Extras {
             return;
         }
 
-        $post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0;
+        $post_id = isset( $_GET['post'] ) ? absint( wp_unslash( $_GET['post'] ) ) : 0;
         $tabs = $post_id ? get_post_meta( $post_id, '_wct_product_tabs', true ) : array();
         $extras = array();
 
