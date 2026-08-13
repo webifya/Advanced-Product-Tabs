@@ -1,0 +1,162 @@
+name: Export Immortals Product PNGs
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/export-immortals-product-pngs.yml
+
+permissions:
+  contents: read
+
+jobs:
+  export-images:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install image tools
+        run: python -m pip install --disable-pip-version-check pillow requests
+
+      - name: Download and convert original product images
+        shell: bash
+        run: |
+          python <<'PY'
+          from __future__ import annotations
+
+          import csv
+          import hashlib
+          import io
+          import time
+          from pathlib import Path
+
+          import requests
+          from PIL import Image
+
+          OUTPUT = Path('immortals-product-pngs')
+          OUTPUT.mkdir(parents=True, exist_ok=True)
+
+          products = [
+              ('tirzepatide-microdose-injections.png', 'Tirzepatide Microdose (Injections)', 'https://immortals.com/cdn/shop/files/Tirzepatide_Microdose.webp?v=1780677653&width=1200'),
+              ('peptide-skin-complex.png', 'Peptide Skin Complex (4-in-1)', 'https://immortals.com/cdn/shop/files/Topical_1_11d74a00-fe78-41ac-85de-867bff3bc391.png?v=1781204337&width=1200'),
+              ('daily-tadalafil-generic-cialis.png', 'Daily Tadalafil (Generic for Cialis)', 'https://immortals.com/cdn/shop/files/Tadalafil_Container.webp?v=1779299345&width=1200'),
+              ('sermorelin-injections.png', 'Sermorelin (Injections)', 'https://immortals.com/cdn/shop/files/Sermorelin_Injections_Container.webp?v=1780678175&width=1200'),
+              ('nad-injections.png', 'NAD+ (Injections)', 'https://immortals.com/cdn/shop/files/NAD.webp?v=1780677653&width=1200'),
+              ('nad-nasal-spray.png', 'NAD+ (Nasal Spray)', 'https://immortals.com/cdn/shop/files/NAD_1.webp?v=1780677984&width=1200'),
+              ('glutathione-injections.png', 'Glutathione (Injections)', 'https://immortals.com/cdn/shop/files/Gluthatione.webp?v=1780677653&width=1200'),
+              ('glutathione-nasal-spray.png', 'Glutathione (Nasal Spray)', 'https://immortals.com/cdn/shop/files/Glutathione.webp?v=1780677984&width=1200'),
+              ('mens-sex-complex.png', "Men's Sex Complex (3-in-1)", 'https://immortals.com/cdn/shop/files/Sex_Complex_Container.webp?v=1779303378&width=1200'),
+              ('mens-hair-complex.png', "Men's Hair Complex (3-in-1)", 'https://immortals.com/cdn/shop/files/Hair_Complex_container.webp?v=1779303235&width=1200'),
+              ('womens-skin-complex.png', "Women's Skin Complex (4-in-1)", 'https://immortals.com/cdn/shop/files/Topical_1_11d74a00-fe78-41ac-85de-867bff3bc391.png?v=1781204337&width=1200'),
+              ('metformin.png', 'Metformin', 'https://immortals.com/cdn/shop/files/Metformin_container.webp?v=1779298439&width=1200'),
+              ('acarbose.png', 'Acarbose', 'https://immortals.com/cdn/shop/files/Acarbose_container.webp?v=1779299296&width=1200'),
+              ('tretinoin.png', 'Tretinoin', 'https://immortals.com/cdn/shop/files/Topical_1_11d74a00-fe78-41ac-85de-867bff3bc391.png?v=1781204337&width=1200'),
+              ('arousal-peptide-injections.png', 'Arousal Peptide (Injections)', 'https://immortals.com/cdn/shop/files/Arousal_Peptide.webp?v=1780677653&width=1200'),
+              ('arousal-peptide-nasal-spray.png', 'Arousal Peptide (Nasal Spray)', 'https://immortals.com/cdn/shop/files/Arousal_Peptide_1.webp?v=1780677984&width=1200'),
+              ('estradiol-generic-estrace.png', 'Estradiol (Generic for Estrace)', 'https://immortals.com/cdn/shop/files/Topical_1_11d74a00-fe78-41ac-85de-867bff3bc391.png?v=1781204337&width=1200'),
+              ('semaglutide-microdose-injections.png', 'Semaglutide Microdose (Injections)', 'https://immortals.com/cdn/shop/files/Semaglutide_microdose.webp?v=1780677653&width=1200'),
+              ('brenzavvy.png', 'Brenzavvy', 'https://immortals.com/cdn/shop/files/Brenzavvy_container.webp?v=1779299771&width=1200'),
+              ('oral-minoxidil.png', 'Oral Minoxidil', 'https://immortals.com/cdn/shop/files/Oral_Minoxidil_container.webp?v=1779299582&width=1200'),
+              ('jardiance.png', 'Jardiance', 'https://immortals.com/cdn/shop/files/Jardiance_container.webp?v=1779299673&width=1200'),
+              ('daily-cialis.png', 'Daily Cialis', 'https://immortals.com/cdn/shop/files/Daily_Cialis.webp?v=1781053151&width=1200'),
+              ('foundayo-tablets.png', 'Foundayo (Tablets)', 'https://immortals.com/cdn/shop/files/Foundayo_Tablets_container_57389757-381d-40a8-8bd5-b2f8c96f4567.webp?v=1779302307&width=1200'),
+              ('wegovy-injections.png', 'Wegovy (Injections)', 'https://immortals.com/cdn/shop/files/Medication_Container_17.webp?v=1781285613&width=1200'),
+              ('wegovy-tablets.png', 'Wegovy (Tablets)', 'https://immortals.com/cdn/shop/files/Wegovy_Tablets_container.webp?v=1779302655&width=1200'),
+              ('zepbound-kwikpen.png', 'Zepbound (KwikPen)', 'https://immortals.com/cdn/shop/files/Medication_Container_16.webp?v=1781204731&width=1200'),
+              ('personalized-semaglutide-injections.png', 'Personalized Semaglutide (Injections)', 'https://immortals.com/cdn/shop/files/Semaglutide.webp?v=1780677653&width=1200'),
+              ('personalized-tirzepatide-injections.png', 'Personalized Tirzepatide (Injections)', 'https://immortals.com/cdn/shop/files/Tirzepatide.webp?v=1780677653&width=1200'),
+          ]
+
+          session = requests.Session()
+          session.headers.update({
+              'User-Agent': 'Mozilla/5.0 (compatible; ImmortalsProductImageExporter/1.0)',
+              'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+              'Referer': 'https://immortals.com/collections/browse-all',
+          })
+
+          cache: dict[str, bytes] = {}
+          manifest: list[dict[str, object]] = []
+
+          for index, (filename, product_name, url) in enumerate(products, start=1):
+              print(f'[{index:02d}/{len(products)}] {product_name}')
+
+              if url not in cache:
+                  error = None
+                  for attempt in range(1, 5):
+                      try:
+                          response = session.get(url, timeout=90)
+                          response.raise_for_status()
+                          if len(response.content) < 1000:
+                              raise RuntimeError(f'Image response was too small: {len(response.content)} bytes')
+                          cache[url] = response.content
+                          break
+                      except Exception as exc:
+                          error = exc
+                          if attempt < 4:
+                              time.sleep(attempt * 3)
+                  else:
+                      raise RuntimeError(f'Could not download {product_name}: {error}')
+
+              source_bytes = cache[url]
+              with Image.open(io.BytesIO(source_bytes)) as source:
+                  source.load()
+                  had_alpha = source.mode in {'RGBA', 'LA'} or ('transparency' in source.info)
+                  converted = source.convert('RGBA')
+                  output_path = OUTPUT / filename
+                  converted.save(output_path, format='PNG', optimize=True)
+
+                  alpha = converted.getchannel('A')
+                  alpha_min, alpha_max = alpha.getextrema()
+                  transparent_pixels = alpha_min < 255
+
+                  manifest.append({
+                      'filename': filename,
+                      'product': product_name,
+                      'width': converted.width,
+                      'height': converted.height,
+                      'source_mode': source.mode,
+                      'source_had_alpha': had_alpha,
+                      'png_has_transparency': transparent_pixels,
+                      'sha256': hashlib.sha256(output_path.read_bytes()).hexdigest(),
+                      'source_url': url,
+                  })
+
+          with (OUTPUT / 'manifest.csv').open('w', newline='', encoding='utf-8') as handle:
+              writer = csv.DictWriter(handle, fieldnames=manifest[0].keys())
+              writer.writeheader()
+              writer.writerows(manifest)
+
+          transparent_count = sum(bool(row['png_has_transparency']) for row in manifest)
+          readme = (
+              'Immortals Product PNG Export\n'
+              '============================\n\n'
+              f'Files: {len(products)} product PNGs\n'
+              f'PNGs with transparent pixels: {transparent_count}\n\n'
+              'The images were downloaded from the original Immortals browse-all product-card assets and converted to PNG while preserving any existing alpha channel.\n'
+              'See manifest.csv for product names, dimensions, transparency status, checksums, and source URLs.\n'
+          )
+          (OUTPUT / 'README.txt').write_text(readme, encoding='utf-8')
+
+          if len(list(OUTPUT.glob('*.png'))) != len(products):
+              raise RuntimeError('The output folder does not contain all expected PNG files.')
+
+          print(f'Created {len(products)} PNG files; {transparent_count} contain transparent pixels.')
+          PY
+
+      - name: Upload PNG ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: immortals-product-pngs
+          path: immortals-product-pngs/
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 7
