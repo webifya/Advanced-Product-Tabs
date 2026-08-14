@@ -40,4 +40,4 @@ jobs:
 
       - name: Run Plugin Check
         shell: bash
-        run: wp-env run cli wp --debug plugin check tabora-product-tabs-for-woocommerce --require=./wp-content/plugins/plugin-check/cli.php
+        run: wp-env run cli sh -lc 'wp --debug plugin check tabora-product-tabs-for-woocommerce --require=./wp-content/plugins/plugin-check/cli.php'
