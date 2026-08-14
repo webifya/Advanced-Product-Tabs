@@ -41,5 +41,5 @@ jobs:
           wp-env run cli wp config set WP_DEBUG true --raw
           wp-env run cli wp config set WP_DEBUG_LOG true --raw
           wp-env run cli wp config set WP_DEBUG_DISPLAY false --raw
-          wp-env run cli wp plugin check tabora-product-tabs-for-woocommerce --format=json --require=./wp-content/plugins/plugin-check/cli.php || true
+          wp-env run cli sh -lc 'WP_CLI_PHP_ARGS="-d display_errors=1 -d log_errors=1 -d error_log=/tmp/tabora-php-errors.log" wp --debug plugin check tabora-product-tabs-for-woocommerce --format=json --require=./wp-content/plugins/plugin-check/cli.php || true; test ! -f /tmp/tabora-php-errors.log || cat /tmp/tabora-php-errors.log'
           wp-env run cli sh -lc 'test ! -f wp-content/debug.log || tail -n 200 wp-content/debug.log'
