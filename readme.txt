@@ -1,6 +1,6 @@
 === Tabora Product Tabs for WooCommerce ===
 Contributors: mahfuzar
-Tags: woocommerce, product tabs, custom tabs, responsive tabs, accordion, rich text
+Tags: woocommerce, product tabs, custom tabs, responsive tabs, accordion
 Requires at least: 6.4
 Tested up to: 7.0
 Requires PHP: 7.4
