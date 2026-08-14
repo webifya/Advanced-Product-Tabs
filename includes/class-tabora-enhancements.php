@@ -211,6 +211,8 @@ final class TABORA_Enhancements {
         if ( ! current_user_can( 'edit_product', $product->get_id() ) ) {
             return;
         }
+        // Each extras field is sanitized below according to its expected content type.
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
         $raw = isset( $_POST['tabora_tabs'] ) && is_array( $_POST['tabora_tabs'] ) ? wp_unslash( $_POST['tabora_tabs'] ) : array();
         $saved = $product->get_meta( '_tabora_product_tabs', true );
         if ( ! is_array( $saved ) ) {
