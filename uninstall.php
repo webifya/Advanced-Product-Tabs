@@ -12,7 +12,7 @@ if ( ! defined( 'TABORA_DELETE_DATA_ON_UNINSTALL' ) || true !== TABORA_DELETE_DA
     return;
 }
 
-$global_tabs = get_posts(
+$tabora_global_tabs = get_posts(
     array(
         'post_type'      => 'tabora_global_tab',
         'post_status'    => 'any',
@@ -22,8 +22,8 @@ $global_tabs = get_posts(
     )
 );
 
-foreach ( $global_tabs as $tab_id ) {
-    wp_delete_post( $tab_id, true );
+foreach ( $tabora_global_tabs as $tabora_tab_id ) {
+    wp_delete_post( $tabora_tab_id, true );
 }
 
 delete_post_meta_by_key( '_tabora_product_tabs' );
