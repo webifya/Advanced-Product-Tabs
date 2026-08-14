@@ -17,19 +17,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Build production tree
         shell: bash
         run: |
-          mkdir plugin-build
-          git archive HEAD | tar -x -C plugin-build
+          mkdir -p plugin-build/tabora-product-tabs-for-woocommerce
+          git archive HEAD | tar -x -C plugin-build/tabora-product-tabs-for-woocommerce
 
       - name: Lint PHP
         shell: bash
-        run: find plugin-build -name '*.php' -print0 | xargs -0 -n1 php -l
+        run: find plugin-build/tabora-product-tabs-for-woocommerce -name '*.php' -print0 | xargs -0 -n1 php -l
 
       - name: Run Plugin Check
         uses: wordpress/plugin-check-action@v1
         with:
-          build-dir: ./plugin-build
+          build-dir: ./plugin-build/tabora-product-tabs-for-woocommerce
