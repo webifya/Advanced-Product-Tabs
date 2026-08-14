@@ -2,7 +2,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-final class WCT_Product_Extras {
+final class TABORA_Product_Extras {
     public static function init(): void {
         add_filter( 'woocommerce_product_tabs', array( __CLASS__, 'attach_extras' ), 998 );
         add_action( 'admin_enqueue_scripts', array( __CLASS__, 'localize_admin_extras' ), 30 );
@@ -14,20 +14,20 @@ final class WCT_Product_Extras {
             return $tabs;
         }
 
-        $saved = $product->get_meta( '_wct_product_tabs', true );
+        $saved = $product->get_meta( '_tabora_product_tabs', true );
         if ( ! is_array( $saved ) ) {
             return $tabs;
         }
 
         foreach ( $saved as $index => $data ) {
-            $key = 'wct_product_' . $product->get_id() . '_' . absint( $index );
+            $key = 'tabora_product_' . $product->get_id() . '_' . absint( $index );
             if ( ! isset( $tabs[ $key ] ) ) {
                 continue;
             }
-            $tabs[ $key ]['wct_icon'] = sanitize_text_field( $data['icon'] ?? '' );
-            $tabs[ $key ]['wct_class'] = sanitize_html_class( $data['css_class'] ?? '' );
+            $tabs[ $key ]['tabora_icon'] = sanitize_text_field( $data['icon'] ?? '' );
+            $tabs[ $key ]['tabora_class'] = sanitize_html_class( $data['css_class'] ?? '' );
             $visibility = sanitize_key( $data['visibility'] ?? 'all' );
-            $tabs[ $key ]['wct_visibility'] = in_array( $visibility, array( 'all', 'logged_in', 'logged_out' ), true ) ? $visibility : 'all';
+            $tabs[ $key ]['tabora_visibility'] = in_array( $visibility, array( 'all', 'logged_in', 'logged_out' ), true ) ? $visibility : 'all';
         }
 
         return $tabs;
@@ -35,12 +35,12 @@ final class WCT_Product_Extras {
 
     public static function localize_admin_extras(): void {
         $screen = get_current_screen();
-        if ( ! $screen || 'product' !== $screen->post_type || ! wp_script_is( 'wct-admin-enhancements', 'enqueued' ) ) {
+        if ( ! $screen || 'product' !== $screen->post_type || ! wp_script_is( 'tabora-admin-enhancements', 'enqueued' ) ) {
             return;
         }
 
         $post_id = isset( $_GET['post'] ) ? absint( wp_unslash( $_GET['post'] ) ) : 0;
-        $tabs = $post_id ? get_post_meta( $post_id, '_wct_product_tabs', true ) : array();
+        $tabs = $post_id ? get_post_meta( $post_id, '_tabora_product_tabs', true ) : array();
         $extras = array();
 
         if ( is_array( $tabs ) ) {
@@ -54,6 +54,6 @@ final class WCT_Product_Extras {
             }
         }
 
-        wp_localize_script( 'wct-admin-enhancements', 'wctTabExtras', $extras );
+        wp_localize_script( 'tabora-admin-enhancements', 'taboraTabExtras', $extras );
     }
 }

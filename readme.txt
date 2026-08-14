@@ -1,10 +1,10 @@
-=== Advanced Product Tabs ===
+=== Tabora Product Tabs for WooCommerce ===
 Contributors: mahfuzar
 Tags: woocommerce, product tabs, custom tabs, responsive tabs, accordion, rich text
 Requires at least: 6.4
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.3.2
+Stable tag: 1.3.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,10 +12,9 @@ Create responsive global and product-specific tabs for WooCommerce products.
 
 == Description ==
 
-Advanced Product Tabs by mahfuzar adds a flexible product-tab manager for WooCommerce with responsive mobile behavior.
+Tabora Product Tabs for WooCommerce by mahfuzar adds a flexible product-tab manager for WooCommerce with responsive mobile behavior.
 
 Developer: mahfuzar
-Plugin website: https://webninjallc.com
 
 Features:
 
@@ -39,9 +38,9 @@ Features:
 
 == Installation ==
 
-1. Upload the `advanced-product-tabs` folder to `/wp-content/plugins/`, or install the ZIP from WordPress.
+1. Upload the `tabora-product-tabs-for-woocommerce` folder to `/wp-content/plugins/`, or install the ZIP from WordPress.
 2. Activate WooCommerce.
-3. Activate Advanced Product Tabs.
+3. Activate Tabora Product Tabs for WooCommerce.
 4. Edit a product and open Product data > Custom Tabs.
 5. Add tabs, write content using the Visual/Text editor, and drag tabs into the required order.
 6. Update the product to save the content and order.
@@ -68,9 +67,15 @@ When enabled, WooCommerce product tabs become accessible accordion panels below 
 
 = Does uninstalling remove my tab data? =
 
-No. Data is retained by default. To delete it during uninstall, define `WCT_DELETE_DATA_ON_UNINSTALL` as `true` in wp-config.php before uninstalling.
+No. Data is retained by default. To delete it during uninstall, define `TABORA_DELETE_DATA_ON_UNINSTALL` as `true` in wp-config.php before uninstalling.
 
 == Changelog ==
+
+= 1.3.3 =
+* Rebranded the plugin as Tabora Product Tabs for WooCommerce.
+* Applied the unique Tabora prefix to declarations, stored data, hooks, assets, and UI identifiers.
+* Moved frontend style overrides into an enqueued stylesheet.
+* Removed manual translation loading for WordPress.org language packs.
 
 = 1.3.2 =
 * Updated WordPress compatibility information.
@@ -81,7 +86,7 @@ No. Data is retained by default. To delete it during uninstall, define `WCT_DELE
 * Set the WordPress.org contributor and developer username to mahfuzar.
 
 = 1.3.1 =
-* Renamed the plugin to Advanced Product Tabs.
+* Updated the plugin name and metadata.
 * Updated author branding.
 * Renamed the main plugin bootstrap file.
 * Updated the WordPress.org readme and plugin text domain.

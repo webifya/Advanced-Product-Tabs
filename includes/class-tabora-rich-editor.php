@@ -2,7 +2,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-final class WCT_Rich_Editor {
+final class TABORA_Rich_Editor {
     public static function init(): void {
         add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_assets' ), 30 );
         add_filter( 'woocommerce_product_tabs', array( __CLASS__, 'apply_drag_order' ), 997 );
@@ -19,33 +19,33 @@ final class WCT_Rich_Editor {
         wp_enqueue_media();
 
         wp_enqueue_style(
-            'wct-product-editor',
-            WCT_URL . 'assets/product-editor.css',
-            array( 'wct-admin' ),
-            WCT_VERSION
+            'tabora-product-editor',
+            TABORA_URL . 'assets/product-editor.css',
+            array( 'tabora-admin' ),
+            TABORA_VERSION
         );
 
         wp_enqueue_style(
-            'wct-product-editor-fixes',
-            WCT_URL . 'assets/product-editor-fixes.css',
-            array( 'wct-product-editor' ),
-            WCT_VERSION
+            'tabora-product-editor-fixes',
+            TABORA_URL . 'assets/product-editor-fixes.css',
+            array( 'tabora-product-editor' ),
+            TABORA_VERSION
         );
 
         wp_enqueue_script(
-            'wct-product-editor',
-            WCT_URL . 'assets/product-editor.js',
+            'tabora-product-editor',
+            TABORA_URL . 'assets/product-editor.js',
             array( 'jquery', 'jquery-ui-sortable', 'wp-editor', 'media-editor' ),
-            WCT_VERSION,
+            TABORA_VERSION,
             true
         );
 
         wp_localize_script(
-            'wct-product-editor',
-            'wctEditorSettings',
+            'tabora-product-editor',
+            'taboraEditorSettings',
             array(
-                'mediaTitle'  => __( 'Insert media into product tab', 'advanced-product-tabs' ),
-                'mediaButton' => __( 'Insert into tab', 'advanced-product-tabs' ),
+                'mediaTitle'  => __( 'Insert media into product tab', 'tabora-product-tabs-for-woocommerce' ),
+                'mediaButton' => __( 'Insert into tab', 'tabora-product-tabs-for-woocommerce' ),
             )
         );
     }
@@ -54,7 +54,7 @@ final class WCT_Rich_Editor {
         $position = 0;
 
         foreach ( $tabs as $key => &$tab ) {
-            if ( 0 !== strpos( $key, 'wct_product_' ) ) {
+            if ( 0 !== strpos( $key, 'tabora_product_' ) ) {
                 continue;
             }
 

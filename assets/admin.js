@@ -2,46 +2,46 @@
     'use strict';
 
     function reindexRows($list) {
-        $list.find('.wct-tab-row').each(function (index) {
+        $list.find('.tabora-tab-row').each(function (index) {
             var $row = $(this);
 
-            $row.attr('data-wct-order', index);
+            $row.attr('data-tabora-order', index);
             $row.find('[name]').each(function () {
-                this.name = this.name.replace(/wct_tabs\[[^\]]+\]/, 'wct_tabs[' + index + ']');
+                this.name = this.name.replace(/tabora_tabs\[[^\]]+\]/, 'tabora_tabs[' + index + ']');
             });
 
-            $row.find('.wct-order-number').text(index + 1);
+            $row.find('.tabora-order-number').text(index + 1);
         });
     }
 
     function markProductChanged() {
         $('#publish').removeClass('disabled');
         $('#woocommerce-product-data').trigger('woocommerce_variations_loaded');
-        $(document.body).trigger('wct_tabs_reordered');
+        $(document.body).trigger('tabora_tabs_reordered');
     }
 
     function collapseRow($row, animate) {
-        var $fields = $row.find('> .wct-tab-fields');
+        var $fields = $row.find('> .tabora-tab-fields');
         $row.removeClass('is-open').addClass('is-collapsed');
-        $row.find('> .wct-tab-row-bar .wct-toggle').attr('aria-expanded', 'false').text('Expand');
+        $row.find('> .tabora-tab-row-bar .tabora-toggle').attr('aria-expanded', 'false').text('Expand');
         animate ? $fields.stop(true, true).slideUp(140) : $fields.hide();
     }
 
     function expandRow($row, animate) {
-        var $list = $row.closest('.wct-tab-list');
+        var $list = $row.closest('.tabora-tab-list');
 
-        $list.children('.wct-tab-row').not($row).each(function () {
+        $list.children('.tabora-tab-row').not($row).each(function () {
             collapseRow($(this), animate);
         });
 
-        var $fields = $row.find('> .wct-tab-fields');
+        var $fields = $row.find('> .tabora-tab-fields');
         $row.removeClass('is-collapsed').addClass('is-open');
-        $row.find('> .wct-tab-row-bar .wct-toggle').attr('aria-expanded', 'true').text('Collapse');
+        $row.find('> .tabora-tab-row-bar .tabora-toggle').attr('aria-expanded', 'true').text('Collapse');
         animate ? $fields.stop(true, true).slideDown(140) : $fields.show();
     }
 
     $(function () {
-        var $list = $('.wct-tab-list');
+        var $list = $('.tabora-tab-list');
 
         if (!$list.length) {
             return;
@@ -49,7 +49,7 @@
 
         reindexRows($list);
 
-        $list.children('.wct-tab-row').each(function (index) {
+        $list.children('.tabora-tab-row').each(function (index) {
             if (index === 0) {
                 expandRow($(this), false);
             } else {
@@ -58,13 +58,13 @@
         });
 
         $list.sortable({
-            handle: '.wct-drag',
-            items: '> .wct-tab-row',
+            handle: '.tabora-drag',
+            items: '> .tabora-tab-row',
             axis: 'y',
             tolerance: 'pointer',
             distance: 4,
             cursor: 'grabbing',
-            placeholder: 'wct-sort-placeholder',
+            placeholder: 'tabora-sort-placeholder',
             forcePlaceholderSize: true,
             helper: function (event, item) {
                 var $helper = item.clone();
@@ -72,11 +72,11 @@
                 return $helper;
             },
             start: function (event, ui) {
-                ui.item.addClass('wct-is-dragging');
+                ui.item.addClass('tabora-is-dragging');
                 ui.placeholder.height(ui.item.outerHeight());
             },
             stop: function (event, ui) {
-                ui.item.removeClass('wct-is-dragging');
+                ui.item.removeClass('tabora-is-dragging');
                 reindexRows($list);
                 markProductChanged();
             },
@@ -85,32 +85,32 @@
             }
         });
 
-        $('.wct-add-tab').on('click', function () {
-            var template = wp.template('wct-tab-row');
-            var $row = $(template({ index: $list.children('.wct-tab-row').length }));
+        $('.tabora-add-tab').on('click', function () {
+            var template = wp.template('tabora-tab-row');
+            var $row = $(template({ index: $list.children('.tabora-tab-row').length }));
             $list.append($row);
             reindexRows($list);
             expandRow($row, true);
             markProductChanged();
         });
 
-        $list.on('click', '.wct-remove', function () {
-            var $row = $(this).closest('.wct-tab-row');
+        $list.on('click', '.tabora-remove', function () {
+            var $row = $(this).closest('.tabora-tab-row');
             var wasOpen = $row.hasClass('is-open');
             $row.remove();
             reindexRows($list);
-            if (wasOpen && $list.children('.wct-tab-row').length) {
-                expandRow($list.children('.wct-tab-row').first(), true);
+            if (wasOpen && $list.children('.tabora-tab-row').length) {
+                expandRow($list.children('.tabora-tab-row').first(), true);
             }
             markProductChanged();
         });
 
-        $list.on('click', '.wct-toggle, .wct-row-title', function (event) {
-            if ($(event.target).closest('.wct-remove, .wct-drag').length) {
+        $list.on('click', '.tabora-toggle, .tabora-row-title', function (event) {
+            if ($(event.target).closest('.tabora-remove, .tabora-drag').length) {
                 return;
             }
 
-            var $row = $(this).closest('.wct-tab-row');
+            var $row = $(this).closest('.tabora-tab-row');
             if ($row.hasClass('is-open')) {
                 collapseRow($row, true);
             } else {
@@ -122,9 +122,9 @@
             markProductChanged();
         });
 
-        $list.on('input', '.wct-title', function () {
+        $list.on('input', '.tabora-title', function () {
             var value = $.trim($(this).val());
-            $(this).closest('.wct-tab-row').find('.wct-row-title').text(value || 'New Tab');
+            $(this).closest('.tabora-tab-row').find('.tabora-row-title').text(value || 'New Tab');
         });
     });
 })(jQuery);

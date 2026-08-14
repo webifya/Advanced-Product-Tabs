@@ -27,7 +27,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          plugin_version=$(sed -n 's/^ \* Version: //p' advanced-product-tabs.php | head -n 1 | tr -d '\r')
+          plugin_version=$(sed -n 's/^ \* Version: //p' tabora-product-tabs-for-woocommerce.php | head -n 1 | tr -d '\r')
           stable_tag=$(sed -n 's/^Stable tag: //p' readme.txt | head -n 1 | tr -d '\r')
           if [[ "${GITHUB_REF_NAME}" != "${plugin_version}" || "${GITHUB_REF_NAME}" != "${stable_tag}" ]]; then
             echo "Release tag, plugin version, and Stable tag must match."
@@ -39,4 +39,4 @@ jobs:
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-          SLUG: advanced-product-tabs
+          SLUG: tabora-product-tabs-for-woocommerce

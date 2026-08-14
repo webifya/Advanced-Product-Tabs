@@ -2,7 +2,7 @@
     'use strict';
 
     function buildAccordion($wrapper) {
-        if ($wrapper.data('wctAccordionReady')) {
+        if ($wrapper.data('taboraAccordionReady')) {
             return;
         }
 
@@ -21,16 +21,16 @@
                 return;
             }
 
-            var buttonId = 'wct-accordion-' + index + '-' + Math.random().toString(36).slice(2, 8);
+            var buttonId = 'tabora-accordion-' + index + '-' + Math.random().toString(36).slice(2, 8);
             var panelId = $panel.attr('id');
-            var $button = $('<button type="button" class="wct-accordion-title" aria-expanded="false"></button>');
+            var $button = $('<button type="button" class="tabora-accordion-title" aria-expanded="false"></button>');
             $button.attr({ id: buttonId, 'aria-controls': panelId }).html($link.html());
             $panel.attr({ role: 'region', 'aria-labelledby': buttonId });
             $panel.before($button);
 
             $button.on('click', function () {
                 var isOpen = $(this).attr('aria-expanded') === 'true';
-                $wrapper.find('.wct-accordion-title').attr('aria-expanded', 'false');
+                $wrapper.find('.tabora-accordion-title').attr('aria-expanded', 'false');
                 $wrapper.children('.woocommerce-Tabs-panel').stop(true, true).slideUp(180);
                 if (!isOpen) {
                     $(this).attr('aria-expanded', 'true');
@@ -39,21 +39,21 @@
             });
         });
 
-        $wrapper.data('wctAccordionReady', true);
+        $wrapper.data('taboraAccordionReady', true);
     }
 
     function updateMode() {
-        var config = window.wctFrontend || {};
+        var config = window.taboraFrontend || {};
         var breakpoint = parseInt(config.breakpoint, 10) || 768;
 
         $('.woocommerce-tabs').each(function () {
             var $wrapper = $(this);
             buildAccordion($wrapper);
-            $wrapper.addClass('wct-style-' + (config.style || 'default'));
+            $wrapper.addClass('tabora-style-' + (config.style || 'default'));
 
             if (config.accordion && window.innerWidth <= breakpoint) {
-                $wrapper.addClass('wct-accordion-mode');
-                var $buttons = $wrapper.find('.wct-accordion-title');
+                $wrapper.addClass('tabora-accordion-mode');
+                var $buttons = $wrapper.find('.tabora-accordion-title');
                 var $panels = $wrapper.children('.woocommerce-Tabs-panel');
                 $panels.hide();
                 $buttons.attr('aria-expanded', 'false');
@@ -62,8 +62,8 @@
                     $panels.first().show();
                 }
             } else {
-                $wrapper.removeClass('wct-accordion-mode');
-                $wrapper.find('.wct-accordion-title').attr('aria-expanded', 'false');
+                $wrapper.removeClass('tabora-accordion-mode');
+                $wrapper.find('.tabora-accordion-title').attr('aria-expanded', 'false');
                 $wrapper.children('.woocommerce-Tabs-panel').show();
             }
         });

@@ -10,22 +10,22 @@
     }
 
     function syncAllEditors() {
-        $('.wct-rich-editor').each(function () {
+        $('.tabora-rich-editor').each(function () {
             syncEditor(this.id);
         });
     }
 
     function initializeEditor($textarea) {
-        if ($textarea.hasClass('wct-rich-editor')) {
+        if ($textarea.hasClass('tabora-rich-editor')) {
             return;
         }
 
         editorCounter += 1;
-        var editorId = 'wct_tab_editor_' + editorCounter;
-        $textarea.attr('id', editorId).addClass('wct-rich-editor');
+        var editorId = 'tabora_tab_editor_' + editorCounter;
+        $textarea.attr('id', editorId).addClass('tabora-rich-editor');
 
-        var $toolbar = $('<div class="wct-editor-media-row"></div>');
-        var $mediaButton = $('<button type="button" class="button wct-add-media"><span class="dashicons dashicons-admin-media"></span> Add Media</button>');
+        var $toolbar = $('<div class="tabora-editor-media-row"></div>');
+        var $mediaButton = $('<button type="button" class="button tabora-add-media"><span class="dashicons dashicons-admin-media"></span> Add Media</button>');
         $mediaButton.attr('data-editor', editorId);
         $toolbar.append($mediaButton);
         $textarea.before($toolbar);
@@ -44,15 +44,15 @@
     }
 
     function initializeAllEditors(context) {
-        $(context || document).find('.wct-content-field textarea').each(function () {
+        $(context || document).find('.tabora-content-field textarea').each(function () {
             initializeEditor($(this));
         });
     }
 
     function openMediaFrame(editorId) {
         var frame = wp.media({
-            title: wctEditorSettings.mediaTitle,
-            button: { text: wctEditorSettings.mediaButton },
+            title: taboraEditorSettings.mediaTitle,
+            button: { text: taboraEditorSettings.mediaButton },
             multiple: false
         });
 
@@ -82,18 +82,18 @@
     $(function () {
         initializeAllEditors(document);
 
-        $(document).on('click', '.wct-add-media', function (event) {
+        $(document).on('click', '.tabora-add-media', function (event) {
             event.preventDefault();
             openMediaFrame($(this).data('editor'));
         });
 
-        $(document).on('click', '.wct-add-tab', function () {
+        $(document).on('click', '.tabora-add-tab', function () {
             window.setTimeout(function () {
-                initializeAllEditors($('.wct-tab-list'));
+                initializeAllEditors($('.tabora-tab-list'));
             }, 50);
         });
 
-        $('.wct-tab-list').on('sortstart', function () {
+        $('.tabora-tab-list').on('sortstart', function () {
             syncAllEditors();
         });
 

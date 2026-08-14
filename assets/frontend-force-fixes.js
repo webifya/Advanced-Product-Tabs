@@ -17,7 +17,7 @@
         var marker = null;
 
         Array.prototype.some.call(item.children, function (child) {
-            if (child.classList && child.classList.contains('wct-hard-marker')) {
+            if (child.classList && child.classList.contains('tabora-hard-marker')) {
                 marker = child;
                 return true;
             }
@@ -26,7 +26,7 @@
 
         if (!marker) {
             marker = document.createElement('span');
-            marker.className = 'wct-hard-marker';
+            marker.className = 'tabora-hard-marker';
             marker.setAttribute('aria-hidden', 'true');
             item.insertBefore(marker, item.firstChild);
         }
@@ -108,7 +108,7 @@
     }
 
     function run() {
-        document.querySelectorAll('.wct-tab-content[data-wct-content="1"]').forEach(fixWrapper);
+        document.querySelectorAll('.tabora-tab-content[data-tabora-content="1"]').forEach(fixWrapper);
     }
 
     function scheduleRun() {
