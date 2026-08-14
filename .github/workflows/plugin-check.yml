@@ -29,6 +29,11 @@ jobs:
         shell: bash
         run: find plugin-build/tabora-product-tabs-for-woocommerce -name '*.php' -print0 | xargs -0 -n1 php -l
 
+      - name: Enable WordPress debug logging
+        shell: bash
+        run: |
+          printf '%s\n' '{"config":{"WP_DEBUG":true,"WP_DEBUG_LOG":true,"WP_DEBUG_DISPLAY":false}}' > .wp-env.json
+
       - name: Run Plugin Check
         uses: wordpress/plugin-check-action@v1
         with:
