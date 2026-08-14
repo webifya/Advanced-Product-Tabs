@@ -33,3 +33,8 @@ jobs:
         uses: wordpress/plugin-check-action@v1
         with:
           build-dir: ./plugin-build/tabora-product-tabs-for-woocommerce
+
+      - name: Show WordPress debug log on failure
+        if: failure()
+        shell: bash
+        run: wp-env run cli sh -lc 'test ! -f wp-content/debug.log || tail -n 200 wp-content/debug.log'
