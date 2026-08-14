@@ -39,7 +39,7 @@ final class TABORA_Product_Extras {
             return;
         }
 
-        $post_id = isset( $_GET['post'] ) ? absint( wp_unslash( $_GET['post'] ) ) : 0;
+        $post_id = get_the_ID();
         $tabs = $post_id ? get_post_meta( $post_id, '_tabora_product_tabs', true ) : array();
         $extras = array();
 
