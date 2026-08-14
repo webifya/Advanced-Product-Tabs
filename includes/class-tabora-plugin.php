@@ -154,6 +154,8 @@ final class TABORA_Plugin {
             return;
         }
 
+        // Each tab field is sanitized below according to its expected content type.
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
         $raw_tabs = isset( $_POST['tabora_tabs'] ) && is_array( $_POST['tabora_tabs'] ) ? wp_unslash( $_POST['tabora_tabs'] ) : array();
         $tabs     = array();
         foreach ( $raw_tabs as $raw_tab ) {
