@@ -29,17 +29,15 @@ jobs:
         shell: bash
         run: find plugin-build/tabora-product-tabs-for-woocommerce -name '*.php' -print0 | xargs -0 -n1 php -l
 
-      - name: Run Plugin Check
+      # Plugin Check 2.0 currently crashes in the action's JSON wrapper even
+      # when the same check succeeds directly. Keep the action for its tested
+      # WordPress/dependency setup, then use the direct command as the gate.
+      - name: Set up Plugin Check environment
         uses: wordpress/plugin-check-action@v1
+        continue-on-error: true
         with:
           build-dir: ./plugin-build/tabora-product-tabs-for-woocommerce
 
-      - name: Show WordPress debug log on failure
-        if: failure()
+      - name: Run Plugin Check
         shell: bash
-        run: |
-          wp-env run cli wp config set WP_DEBUG true --raw
-          wp-env run cli wp config set WP_DEBUG_LOG true --raw
-          wp-env run cli wp config set WP_DEBUG_DISPLAY false --raw
-          wp-env run cli sh -lc 'WP_CLI_PHP_ARGS="-d display_errors=1 -d log_errors=1 -d error_log=/tmp/tabora-php-errors.log" wp --debug plugin check tabora-product-tabs-for-woocommerce --format=json --require=./wp-content/plugins/plugin-check/cli.php || true; test ! -f /tmp/tabora-php-errors.log || cat /tmp/tabora-php-errors.log'
-          wp-env run cli sh -lc 'test ! -f wp-content/debug.log || tail -n 200 wp-content/debug.log'
+        run: wp-env run cli wp --debug plugin check tabora-product-tabs-for-woocommerce --require=./wp-content/plugins/plugin-check/cli.php
