@@ -19,6 +19,8 @@ final class TABORA_Enhancements {
 
         add_action( 'admin_menu', array( $this, 'add_settings_page' ), 99 );
         add_action( 'admin_init', array( $this, 'register_settings' ) );
+        add_action( 'admin_init', array( $this, 'maybe_set_activation_time' ) );
+        add_action( 'admin_post_tabora_review_prompt', array( $this, 'handle_review_prompt' ) );
         add_action( 'admin_head', array( $this, 'suppress_external_notices' ), 1 );
         add_action( 'wp_enqueue_scripts', array( $this, 'frontend_assets' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'enhanced_admin_assets' ), 20 );
@@ -53,6 +55,39 @@ final class TABORA_Enhancements {
         $settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=tabora-settings' ) ) . '">' . esc_html__( 'Settings', 'tabora-product-tabs-for-woocommerce' ) . '</a>';
         array_unshift( $links, $settings_link );
         return $links;
+    }
+
+    public function maybe_set_activation_time(): void {
+        add_option( 'tabora_activated_at', time(), '', false );
+    }
+
+    public function handle_review_prompt(): void {
+        if ( ! current_user_can( 'manage_woocommerce' ) ) {
+            wp_die( esc_html__( 'You are not allowed to perform this action.', 'tabora-product-tabs-for-woocommerce' ) );
+        }
+
+        check_admin_referer( 'tabora_review_prompt' );
+        $choice  = isset( $_GET['choice'] ) ? sanitize_key( wp_unslash( $_GET['choice'] ) ) : '';
+        $user_id = get_current_user_id();
+
+        if ( 'later' === $choice ) {
+            update_user_meta( $user_id, 'tabora_review_prompt_later_until', time() + MONTH_IN_SECONDS );
+        } elseif ( 'dismiss' === $choice ) {
+            update_user_meta( $user_id, 'tabora_review_prompt_status', 'dismissed' );
+        } elseif ( 'review' === $choice ) {
+            update_user_meta( $user_id, 'tabora_review_prompt_status', 'reviewed' );
+            add_filter( 'allowed_redirect_hosts', array( $this, 'allow_wordpress_org_redirect' ) );
+            wp_safe_redirect( 'https://wordpress.org/support/plugin/tabora-product-tabs-for-woocommerce/reviews/#new-post' );
+            exit;
+        }
+
+        wp_safe_redirect( admin_url( 'admin.php?page=tabora-settings' ) );
+        exit;
+    }
+
+    public function allow_wordpress_org_redirect( array $hosts ): array {
+        $hosts[] = 'wordpress.org';
+        return array_unique( $hosts );
     }
 
     private function is_tabora_screen(): bool {
@@ -126,6 +161,7 @@ final class TABORA_Enhancements {
                 <a class="button" href="<?php echo esc_url( admin_url( 'edit.php?post_type=tabora_global_tab' ) ); ?>"><?php esc_html_e( 'Manage Reusable Tabs', 'tabora-product-tabs-for-woocommerce' ); ?></a>
                 <a class="button" href="<?php echo esc_url( 'https://webninjallc.com/' ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Plugin Website', 'tabora-product-tabs-for-woocommerce' ); ?></a>
             </div>
+            <?php $this->render_review_prompt(); ?>
             <nav class="nav-tab-wrapper" aria-label="<?php esc_attr_e( 'Tabora settings sections', 'tabora-product-tabs-for-woocommerce' ); ?>">
                 <a class="nav-tab <?php echo 'settings' === $active_tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=tabora-settings' ) ); ?>"><?php esc_html_e( 'Settings', 'tabora-product-tabs-for-woocommerce' ); ?></a>
                 <a class="nav-tab <?php echo 'products' === $active_tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=tabora-settings&tabora_tab=products' ) ); ?>"><?php esc_html_e( 'Products Using Tabora', 'tabora-product-tabs-for-woocommerce' ); ?></a>
@@ -172,6 +208,71 @@ final class TABORA_Enhancements {
             <?php endif; ?>
         </div>
         <?php
+    }
+
+    private function render_review_prompt(): void {
+        if ( ! $this->should_show_review_prompt() ) {
+            return;
+        }
+
+        $review_url  = wp_nonce_url( admin_url( 'admin-post.php?action=tabora_review_prompt&choice=review' ), 'tabora_review_prompt' );
+        $later_url   = wp_nonce_url( admin_url( 'admin-post.php?action=tabora_review_prompt&choice=later' ), 'tabora_review_prompt' );
+        $dismiss_url = wp_nonce_url( admin_url( 'admin-post.php?action=tabora_review_prompt&choice=dismiss' ), 'tabora_review_prompt' );
+        ?>
+        <div class="notice notice-info tabora-review-prompt">
+            <p><strong><?php esc_html_e( 'Enjoying Tabora Product Tabs?', 'tabora-product-tabs-for-woocommerce' ); ?></strong></p>
+            <p><?php esc_html_e( 'If Tabora has helped you organize your WooCommerce product content, would you consider leaving a review on WordPress.org? Your feedback helps us improve the plugin.', 'tabora-product-tabs-for-woocommerce' ); ?></p>
+            <p class="tabora-review-actions">
+                <a class="button button-primary" href="<?php echo esc_url( $review_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Leave a review', 'tabora-product-tabs-for-woocommerce' ); ?></a>
+                <a class="button" href="<?php echo esc_url( $later_url ); ?>"><?php esc_html_e( 'Maybe later', 'tabora-product-tabs-for-woocommerce' ); ?></a>
+                <a href="<?php echo esc_url( $dismiss_url ); ?>"><?php esc_html_e( 'Don’t ask again', 'tabora-product-tabs-for-woocommerce' ); ?></a>
+            </p>
+        </div>
+        <?php
+    }
+
+    private function should_show_review_prompt(): bool {
+        $user_id = get_current_user_id();
+        if ( ! $user_id || get_user_meta( $user_id, 'tabora_review_prompt_status', true ) ) {
+            return false;
+        }
+
+        $later_until = absint( get_user_meta( $user_id, 'tabora_review_prompt_later_until', true ) );
+        if ( $later_until > time() ) {
+            return false;
+        }
+
+        $activated_at = absint( get_option( 'tabora_activated_at', 0 ) );
+        if ( ! $activated_at || time() < $activated_at + ( 14 * DAY_IN_SECONDS ) ) {
+            return false;
+        }
+
+        $products = get_posts(
+            array(
+                'post_type'      => 'product',
+                'post_status'    => array( 'publish', 'draft', 'pending', 'private' ),
+                'posts_per_page' => 50,
+                'fields'         => 'ids',
+                'meta_query'     => array(
+                    array(
+                        'key'     => '_tabora_product_tabs',
+                        'compare' => 'EXISTS',
+                    ),
+                ),
+                'no_found_rows'  => true,
+            )
+        );
+        $products_with_tabs = 0;
+        foreach ( $products as $product_id ) {
+            $tabs = get_post_meta( $product_id, '_tabora_product_tabs', true );
+            if ( is_array( $tabs ) && array_filter( $tabs, static function ( $tab ) { return ! empty( $tab['enabled'] ) && ! empty( $tab['title'] ); } ) ) {
+                $products_with_tabs++;
+                if ( 3 <= $products_with_tabs ) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private function render_products_tab(): void {

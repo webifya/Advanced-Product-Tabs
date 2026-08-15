@@ -27,3 +27,6 @@ foreach ( $tabora_global_tabs as $tabora_tab_id ) {
 }
 
 delete_post_meta_by_key( '_tabora_product_tabs' );
+delete_option( 'tabora_activated_at' );
+delete_metadata( 'user', 0, 'tabora_review_prompt_status', '', true );
+delete_metadata( 'user', 0, 'tabora_review_prompt_later_until', '', true );

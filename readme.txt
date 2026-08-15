@@ -79,6 +79,7 @@ No. Data is retained by default. To delete it during uninstall, define `TABORA_D
 * Renamed the product editor section to Tabora Product Tabs.
 * Moved Tabora Product Tabs into a dedicated product editor section outside Product data.
 * Kept unrelated plugin notices out of the Tabora settings screen.
+* Added a respectful, dismissible WordPress.org review request after meaningful plugin use.
 
 = 1.3.3 =
 * Rebranded the plugin as Tabora Product Tabs for WooCommerce.

@@ -37,6 +37,7 @@ final class TABORA_Plugin {
             wp_die( esc_html__( 'Tabora Product Tabs for WooCommerce requires WooCommerce to be installed and active.', 'tabora-product-tabs-for-woocommerce' ) );
         }
         self::instance()->register_global_tab_type();
+        add_option( 'tabora_activated_at', time(), '', false );
         flush_rewrite_rules();
     }
 
