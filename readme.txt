@@ -71,10 +71,10 @@ No. Data is retained by default. To delete it during uninstall, define `TABORA_D
 
 == Screenshots ==
 
-1. Tabora Product Tabs section in the WooCommerce product editor.
-2. Creating and arranging product-specific tabs with the rich-text editor.
-3. Reusable tabs management screen for creating global product tabs.
-4. Tabora settings and the Products Using Tabora management view.
+1. Reusable tabs management screen for creating global product tabs.
+2. Tabora Product Tabs section in the WooCommerce product editor.
+3. Creating product-specific tabs with the rich-text editor.
+4. Arranging product-specific tabs with the rich-text editor with media support.
 5. Responsive product tabs displayed as an accordion on the storefront.
 
 == Changelog ==
