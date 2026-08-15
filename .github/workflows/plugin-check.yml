@@ -23,7 +23,11 @@ jobs:
         shell: bash
         run: |
           mkdir -p plugin-build/tabora-product-tabs-for-woocommerce
-          git archive HEAD | tar -x -C plugin-build/tabora-product-tabs-for-woocommerce
+          git archive HEAD -- . \
+            ':(exclude).git*' \
+            ':(exclude).github' \
+            ':(exclude).wordpress-org' \
+            | tar -x -C plugin-build/tabora-product-tabs-for-woocommerce
 
       - name: Lint PHP
         shell: bash
