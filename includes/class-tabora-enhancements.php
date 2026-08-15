@@ -23,7 +23,6 @@ final class TABORA_Enhancements {
         add_action( 'wp_enqueue_scripts', array( $this, 'frontend_assets' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'enhanced_admin_assets' ), 20 );
         add_filter( 'plugin_action_links_' . plugin_basename( TABORA_FILE ), array( $this, 'plugin_action_links' ) );
-        add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
         add_filter( 'woocommerce_product_tabs', array( $this, 'apply_tab_controls' ), 999 );
         add_action( 'woocommerce_admin_process_product_object', array( $this, 'save_product_tab_extras' ), 20 );
         add_action( 'add_meta_boxes_tabora_global_tab', array( $this, 'add_global_display_meta_box' ) );
@@ -53,13 +52,6 @@ final class TABORA_Enhancements {
     public function plugin_action_links( array $links ): array {
         $settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=tabora-settings' ) ) . '">' . esc_html__( 'Settings', 'tabora-product-tabs-for-woocommerce' ) . '</a>';
         array_unshift( $links, $settings_link );
-        return $links;
-    }
-
-    public function plugin_row_meta( array $links, string $file ): array {
-        if ( plugin_basename( TABORA_FILE ) === $file ) {
-            $links[] = '<a href="' . esc_url( 'https://webninjallc.com/' ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Plugin site', 'tabora-product-tabs-for-woocommerce' ) . '</a>';
-        }
         return $links;
     }
 
@@ -128,7 +120,7 @@ final class TABORA_Enhancements {
         ?>
         <div class="wrap tabora-settings-wrap">
             <h1><?php esc_html_e( 'Tabora Product Tabs for WooCommerce', 'tabora-product-tabs-for-woocommerce' ); ?></h1>
-            <p><?php esc_html_e( 'Manage product-specific tabs from the Product data panel when editing any WooCommerce product. Create reusable tabs from Tabora Tabs > Reusable Tabs.', 'tabora-product-tabs-for-woocommerce' ); ?></p>
+            <p><?php esc_html_e( 'Manage product-specific tabs from the dedicated Tabora Product Tabs section when editing any WooCommerce product. Create reusable tabs from Tabora Tabs > Reusable Tabs.', 'tabora-product-tabs-for-woocommerce' ); ?></p>
             <div class="tabora-quick-links">
                 <a class="button button-primary" href="<?php echo esc_url( admin_url( 'edit.php?post_type=product' ) ); ?>"><?php esc_html_e( 'Manage Products', 'tabora-product-tabs-for-woocommerce' ); ?></a>
                 <a class="button" href="<?php echo esc_url( admin_url( 'edit.php?post_type=tabora_global_tab' ) ); ?>"><?php esc_html_e( 'Manage Reusable Tabs', 'tabora-product-tabs-for-woocommerce' ); ?></a>
@@ -219,7 +211,7 @@ final class TABORA_Enhancements {
         ?>
         <div class="tabora-products-panel">
             <h2><?php esc_html_e( 'Products Using Tabora Product Tabs', 'tabora-product-tabs-for-woocommerce' ); ?></h2>
-            <p><?php esc_html_e( 'Products with saved product-specific Tabora tabs are listed below. Open a product and select “Tabora Product Tabs” in the Product data panel to manage its tabs.', 'tabora-product-tabs-for-woocommerce' ); ?></p>
+            <p><?php esc_html_e( 'Products with saved product-specific Tabora tabs are listed below. Open a product and use its dedicated “Tabora Product Tabs” section to manage the tabs.', 'tabora-product-tabs-for-woocommerce' ); ?></p>
             <?php if ( empty( $product_rows ) ) : ?>
                 <p><?php esc_html_e( 'No products currently have product-specific Tabora tabs.', 'tabora-product-tabs-for-woocommerce' ); ?></p>
             <?php else : ?>

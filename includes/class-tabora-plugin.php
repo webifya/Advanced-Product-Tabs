@@ -21,8 +21,7 @@ final class TABORA_Plugin {
         }
 
         add_action( 'init', array( $this, 'register_global_tab_type' ) );
-        add_filter( 'woocommerce_product_data_tabs', array( $this, 'add_product_data_tab' ) );
-        add_action( 'woocommerce_product_data_panels', array( $this, 'render_product_panel' ) );
+        add_action( 'add_meta_boxes_product', array( $this, 'add_product_tabs_meta_box' ) );
         add_action( 'woocommerce_admin_process_product_object', array( $this, 'save_product_tabs' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'admin_assets' ) );
         add_filter( 'woocommerce_product_tabs', array( $this, 'filter_product_tabs' ), 98 );
@@ -78,28 +77,25 @@ final class TABORA_Plugin {
         );
     }
 
-    public function add_product_data_tab( array $tabs ): array {
-        $tabs['tabora_custom_tabs'] = array(
-            'label'    => __( 'Tabora Product Tabs', 'tabora-product-tabs-for-woocommerce' ),
-            'target'   => 'tabora_custom_tabs_panel',
-            'class'    => array(),
-            'priority' => 85,
+    public function add_product_tabs_meta_box(): void {
+        add_meta_box(
+            'tabora_product_tabs',
+            __( 'Tabora Product Tabs', 'tabora-product-tabs-for-woocommerce' ),
+            array( $this, 'render_product_meta_box' ),
+            'product',
+            'normal',
+            'high'
         );
-        return $tabs;
     }
 
-    public function render_product_panel(): void {
-        global $post;
+    public function render_product_meta_box( WP_Post $post ): void {
         $tabs = get_post_meta( $post->ID, '_tabora_product_tabs', true );
         $tabs = is_array( $tabs ) ? $tabs : array();
         wp_nonce_field( 'tabora_save_product_tabs', 'tabora_product_tabs_nonce' );
         ?>
-        <div id="tabora_custom_tabs_panel" class="panel woocommerce_options_panel hidden">
+        <div id="tabora_custom_tabs_panel">
             <div class="tabora-panel-header">
-                <div>
-                    <h2><?php esc_html_e( 'Tabora Product Tabs', 'tabora-product-tabs-for-woocommerce' ); ?></h2>
-                    <p><?php esc_html_e( 'Create tabs that appear only on this product. Drag rows to reorder them.', 'tabora-product-tabs-for-woocommerce' ); ?></p>
-                </div>
+                <p><?php esc_html_e( 'Create tabs that appear only on this product. Drag rows to reorder them.', 'tabora-product-tabs-for-woocommerce' ); ?></p>
                 <button type="button" class="button button-primary tabora-add-tab"><?php esc_html_e( 'Add Tab', 'tabora-product-tabs-for-woocommerce' ); ?></button>
             </div>
             <div class="tabora-tab-list">

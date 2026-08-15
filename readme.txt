@@ -41,7 +41,7 @@ Features:
 1. Upload the `tabora-product-tabs-for-woocommerce` folder to `/wp-content/plugins/`, or install the ZIP from WordPress.
 2. Activate WooCommerce.
 3. Activate Tabora Product Tabs for WooCommerce.
-4. Edit a product and open Product data > Tabora Product Tabs.
+4. Edit a product and open the dedicated Tabora Product Tabs section.
 5. Add tabs, write content using the Visual/Text editor, and drag tabs into the required order.
 6. Update the product to save the content and order.
 7. For reusable tabs, go to Tabora Tabs > Reusable Tabs.
@@ -77,6 +77,7 @@ No. Data is retained by default. To delete it during uninstall, define `TABORA_D
 * Added plugin Settings and website links on the Plugins screen.
 * Added management instructions and quick links to the settings page.
 * Renamed the product editor section to Tabora Product Tabs.
+* Moved Tabora Product Tabs into a dedicated product editor section outside Product data.
 * Kept unrelated plugin notices out of the Tabora settings screen.
 
 = 1.3.3 =
