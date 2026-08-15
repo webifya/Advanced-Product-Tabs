@@ -4,7 +4,7 @@ Tags: woocommerce, product tabs, custom tabs, responsive tabs, accordion
 Requires at least: 6.4
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.3.3
+Stable tag: 1.3.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,7 +19,7 @@ Developer: mahfuzar
 Features:
 
 * Unlimited product-specific tabs.
-* Reusable global tabs under WooCommerce > Product Tabs.
+* Reusable global tabs under Tabora Tabs > Reusable Tabs.
 * Assign global tabs to all products, selected products, product categories, or product tags.
 * Drag-and-drop ordering for product-specific tabs.
 * Rich-text Visual/Text editor for product tab content.
@@ -41,11 +41,11 @@ Features:
 1. Upload the `tabora-product-tabs-for-woocommerce` folder to `/wp-content/plugins/`, or install the ZIP from WordPress.
 2. Activate WooCommerce.
 3. Activate Tabora Product Tabs for WooCommerce.
-4. Edit a product and open Product data > Custom Tabs.
+4. Edit a product and open Product data > Tabora Product Tabs.
 5. Add tabs, write content using the Visual/Text editor, and drag tabs into the required order.
 6. Update the product to save the content and order.
-7. For reusable tabs, go to WooCommerce > Product Tabs.
-8. Configure responsive behavior under WooCommerce > Tab Settings.
+7. For reusable tabs, go to Tabora Tabs > Reusable Tabs.
+8. Configure responsive behavior and view products using Tabora under Tabora Tabs > Settings.
 
 == Frequently Asked Questions ==
 
@@ -70,6 +70,14 @@ When enabled, WooCommerce product tabs become accessible accordion panels below 
 No. Data is retained by default. To delete it during uninstall, define `TABORA_DELETE_DATA_ON_UNINSTALL` as `true` in wp-config.php before uninstalling.
 
 == Changelog ==
+
+= 1.3.4 =
+* Added an organized Tabora Tabs admin menu with Settings and Reusable Tabs.
+* Added a Products Using Tabora management view with direct product edit links.
+* Added plugin Settings and website links on the Plugins screen.
+* Added management instructions and quick links to the settings page.
+* Renamed the product editor section to Tabora Product Tabs.
+* Kept unrelated plugin notices out of the Tabora settings screen.
 
 = 1.3.3 =
 * Rebranded the plugin as Tabora Product Tabs for WooCommerce.

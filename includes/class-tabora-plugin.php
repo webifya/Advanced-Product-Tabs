@@ -60,12 +60,14 @@ final class TABORA_Plugin {
                 'labels' => array(
                     'name'          => __( 'Product Tabs', 'tabora-product-tabs-for-woocommerce' ),
                     'singular_name' => __( 'Product Tab', 'tabora-product-tabs-for-woocommerce' ),
+                    'menu_name'     => __( 'Reusable Tabs', 'tabora-product-tabs-for-woocommerce' ),
+                    'all_items'     => __( 'Reusable Tabs', 'tabora-product-tabs-for-woocommerce' ),
                     'add_new_item'  => __( 'Add New Product Tab', 'tabora-product-tabs-for-woocommerce' ),
                     'edit_item'     => __( 'Edit Product Tab', 'tabora-product-tabs-for-woocommerce' ),
                 ),
                 'public'              => false,
                 'show_ui'             => true,
-                'show_in_menu'        => 'woocommerce',
+                'show_in_menu'        => 'tabora-settings',
                 'show_in_rest'        => true,
                 'supports'            => array( 'title', 'editor', 'page-attributes' ),
                 'capability_type'      => 'product',
@@ -78,7 +80,7 @@ final class TABORA_Plugin {
 
     public function add_product_data_tab( array $tabs ): array {
         $tabs['tabora_custom_tabs'] = array(
-            'label'    => __( 'Custom Tabs', 'tabora-product-tabs-for-woocommerce' ),
+            'label'    => __( 'Tabora Product Tabs', 'tabora-product-tabs-for-woocommerce' ),
             'target'   => 'tabora_custom_tabs_panel',
             'class'    => array(),
             'priority' => 85,
@@ -94,7 +96,10 @@ final class TABORA_Plugin {
         ?>
         <div id="tabora_custom_tabs_panel" class="panel woocommerce_options_panel hidden">
             <div class="tabora-panel-header">
-                <p><?php esc_html_e( 'Create tabs that appear only on this product. Drag rows to reorder them.', 'tabora-product-tabs-for-woocommerce' ); ?></p>
+                <div>
+                    <h2><?php esc_html_e( 'Tabora Product Tabs', 'tabora-product-tabs-for-woocommerce' ); ?></h2>
+                    <p><?php esc_html_e( 'Create tabs that appear only on this product. Drag rows to reorder them.', 'tabora-product-tabs-for-woocommerce' ); ?></p>
+                </div>
                 <button type="button" class="button button-primary tabora-add-tab"><?php esc_html_e( 'Add Tab', 'tabora-product-tabs-for-woocommerce' ); ?></button>
             </div>
             <div class="tabora-tab-list">

@@ -19,8 +19,11 @@ final class TABORA_Enhancements {
 
         add_action( 'admin_menu', array( $this, 'add_settings_page' ), 99 );
         add_action( 'admin_init', array( $this, 'register_settings' ) );
+        add_action( 'admin_head', array( $this, 'suppress_external_notices' ), 1 );
         add_action( 'wp_enqueue_scripts', array( $this, 'frontend_assets' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'enhanced_admin_assets' ), 20 );
+        add_filter( 'plugin_action_links_' . plugin_basename( TABORA_FILE ), array( $this, 'plugin_action_links' ) );
+        add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
         add_filter( 'woocommerce_product_tabs', array( $this, 'apply_tab_controls' ), 999 );
         add_action( 'woocommerce_admin_process_product_object', array( $this, 'save_product_tab_extras' ), 20 );
         add_action( 'add_meta_boxes_tabora_global_tab', array( $this, 'add_global_display_meta_box' ) );
@@ -28,14 +31,49 @@ final class TABORA_Enhancements {
     }
 
     public function add_settings_page(): void {
+        add_menu_page(
+            __( 'Tabora Product Tabs', 'tabora-product-tabs-for-woocommerce' ),
+            __( 'Tabora Tabs', 'tabora-product-tabs-for-woocommerce' ),
+            'manage_woocommerce',
+            'tabora-settings',
+            array( $this, 'render_settings_page' ),
+            'dashicons-index-card',
+            56
+        );
         add_submenu_page(
-            'woocommerce',
-            __( 'Product Tabs Settings', 'tabora-product-tabs-for-woocommerce' ),
-            __( 'Tab Settings', 'tabora-product-tabs-for-woocommerce' ),
+            'tabora-settings',
+            __( 'Tabora Settings', 'tabora-product-tabs-for-woocommerce' ),
+            __( 'Settings', 'tabora-product-tabs-for-woocommerce' ),
             'manage_woocommerce',
             'tabora-settings',
             array( $this, 'render_settings_page' )
         );
+    }
+
+    public function plugin_action_links( array $links ): array {
+        $settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=tabora-settings' ) ) . '">' . esc_html__( 'Settings', 'tabora-product-tabs-for-woocommerce' ) . '</a>';
+        array_unshift( $links, $settings_link );
+        return $links;
+    }
+
+    public function plugin_row_meta( array $links, string $file ): array {
+        if ( plugin_basename( TABORA_FILE ) === $file ) {
+            $links[] = '<a href="' . esc_url( 'https://webninjallc.com/' ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Plugin site', 'tabora-product-tabs-for-woocommerce' ) . '</a>';
+        }
+        return $links;
+    }
+
+    private function is_tabora_screen(): bool {
+        $screen = get_current_screen();
+        return $screen && 'toplevel_page_tabora-settings' === $screen->id;
+    }
+
+    public function suppress_external_notices(): void {
+        if ( ! $this->is_tabora_screen() ) {
+            return;
+        }
+        remove_all_actions( 'admin_notices' );
+        remove_all_actions( 'all_admin_notices' );
     }
 
     public function register_settings(): void {
@@ -83,10 +121,26 @@ final class TABORA_Enhancements {
             return;
         }
         $settings = $this->settings();
+        // Navigation between read-only settings sections does not perform an action.
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $active_tab = isset( $_GET['tabora_tab'] ) ? sanitize_key( wp_unslash( $_GET['tabora_tab'] ) ) : 'settings';
+        $active_tab = in_array( $active_tab, array( 'settings', 'products' ), true ) ? $active_tab : 'settings';
         ?>
         <div class="wrap tabora-settings-wrap">
             <h1><?php esc_html_e( 'Tabora Product Tabs for WooCommerce', 'tabora-product-tabs-for-woocommerce' ); ?></h1>
-            <p><?php esc_html_e( 'Responsive display and WooCommerce product-tab controls by Mahfuzar Rahman.', 'tabora-product-tabs-for-woocommerce' ); ?></p>
+            <p><?php esc_html_e( 'Manage product-specific tabs from the Product data panel when editing any WooCommerce product. Create reusable tabs from Tabora Tabs > Reusable Tabs.', 'tabora-product-tabs-for-woocommerce' ); ?></p>
+            <div class="tabora-quick-links">
+                <a class="button button-primary" href="<?php echo esc_url( admin_url( 'edit.php?post_type=product' ) ); ?>"><?php esc_html_e( 'Manage Products', 'tabora-product-tabs-for-woocommerce' ); ?></a>
+                <a class="button" href="<?php echo esc_url( admin_url( 'edit.php?post_type=tabora_global_tab' ) ); ?>"><?php esc_html_e( 'Manage Reusable Tabs', 'tabora-product-tabs-for-woocommerce' ); ?></a>
+                <a class="button" href="<?php echo esc_url( 'https://webninjallc.com/' ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Plugin Website', 'tabora-product-tabs-for-woocommerce' ); ?></a>
+            </div>
+            <nav class="nav-tab-wrapper" aria-label="<?php esc_attr_e( 'Tabora settings sections', 'tabora-product-tabs-for-woocommerce' ); ?>">
+                <a class="nav-tab <?php echo 'settings' === $active_tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=tabora-settings' ) ); ?>"><?php esc_html_e( 'Settings', 'tabora-product-tabs-for-woocommerce' ); ?></a>
+                <a class="nav-tab <?php echo 'products' === $active_tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=tabora-settings&tabora_tab=products' ) ); ?>"><?php esc_html_e( 'Products Using Tabora', 'tabora-product-tabs-for-woocommerce' ); ?></a>
+            </nav>
+            <?php if ( 'products' === $active_tab ) : ?>
+                <?php $this->render_products_tab(); ?>
+            <?php else : ?>
             <form method="post" action="options.php">
                 <?php settings_fields( 'tabora_settings_group' ); ?>
                 <table class="form-table" role="presentation">
@@ -123,6 +177,71 @@ final class TABORA_Enhancements {
                 </table>
                 <?php submit_button(); ?>
             </form>
+            <?php endif; ?>
+        </div>
+        <?php
+    }
+
+    private function render_products_tab(): void {
+        $products = get_posts(
+            array(
+                'post_type'      => 'product',
+                'post_status'    => array( 'publish', 'draft', 'pending', 'private' ),
+                'posts_per_page' => 100,
+                'meta_query'     => array(
+                    array(
+                        'key'     => '_tabora_product_tabs',
+                        'compare' => 'EXISTS',
+                    ),
+                ),
+                'orderby'        => 'modified',
+                'order'          => 'DESC',
+            )
+        );
+        $product_rows = array();
+        foreach ( $products as $product_post ) {
+            $saved_tabs  = get_post_meta( $product_post->ID, '_tabora_product_tabs', true );
+            $active_tabs = is_array( $saved_tabs ) ? count(
+                array_filter(
+                    $saved_tabs,
+                    static function ( $tab ) {
+                        return ! empty( $tab['enabled'] ) && ! empty( $tab['title'] );
+                    }
+                )
+            ) : 0;
+            if ( $active_tabs ) {
+                $product_rows[] = array(
+                    'post'        => $product_post,
+                    'active_tabs' => $active_tabs,
+                );
+            }
+        }
+        ?>
+        <div class="tabora-products-panel">
+            <h2><?php esc_html_e( 'Products Using Tabora Product Tabs', 'tabora-product-tabs-for-woocommerce' ); ?></h2>
+            <p><?php esc_html_e( 'Products with saved product-specific Tabora tabs are listed below. Open a product and select “Tabora Product Tabs” in the Product data panel to manage its tabs.', 'tabora-product-tabs-for-woocommerce' ); ?></p>
+            <?php if ( empty( $product_rows ) ) : ?>
+                <p><?php esc_html_e( 'No products currently have product-specific Tabora tabs.', 'tabora-product-tabs-for-woocommerce' ); ?></p>
+            <?php else : ?>
+                <table class="widefat striped">
+                    <thead><tr><th><?php esc_html_e( 'Product', 'tabora-product-tabs-for-woocommerce' ); ?></th><th><?php esc_html_e( 'Status', 'tabora-product-tabs-for-woocommerce' ); ?></th><th><?php esc_html_e( 'Active tabs', 'tabora-product-tabs-for-woocommerce' ); ?></th><th><?php esc_html_e( 'Actions', 'tabora-product-tabs-for-woocommerce' ); ?></th></tr></thead>
+                    <tbody>
+                    <?php foreach ( $product_rows as $product_row ) : ?>
+                        <?php
+                        $product_post = $product_row['post'];
+                        $active_tabs  = $product_row['active_tabs'];
+                        $status       = get_post_status_object( $product_post->post_status );
+                        ?>
+                        <tr>
+                            <td><strong><?php echo esc_html( get_the_title( $product_post ) ); ?></strong><br><span class="description">#<?php echo esc_html( $product_post->ID ); ?></span></td>
+                            <td><?php echo esc_html( $status ? $status->label : $product_post->post_status ); ?></td>
+                            <td><?php echo esc_html( $active_tabs ); ?></td>
+                            <td><a href="<?php echo esc_url( get_edit_post_link( $product_post->ID ) ); ?>"><?php esc_html_e( 'Edit tabs', 'tabora-product-tabs-for-woocommerce' ); ?></a><?php if ( 'publish' === $product_post->post_status ) : ?> | <a href="<?php echo esc_url( get_permalink( $product_post->ID ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'View', 'tabora-product-tabs-for-woocommerce' ); ?></a><?php endif; ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
         </div>
         <?php
     }
@@ -148,7 +267,14 @@ final class TABORA_Enhancements {
 
     public function enhanced_admin_assets(): void {
         $screen = get_current_screen();
-        if ( ! $screen || ! in_array( $screen->post_type, array( 'product', 'tabora_global_tab' ), true ) ) {
+        if ( ! $screen ) {
+            return;
+        }
+        if ( 'toplevel_page_tabora-settings' === $screen->id ) {
+            wp_enqueue_style( 'tabora-settings', TABORA_URL . 'assets/settings.css', array(), TABORA_VERSION );
+            return;
+        }
+        if ( ! in_array( $screen->post_type, array( 'product', 'tabora_global_tab' ), true ) ) {
             return;
         }
         wp_enqueue_script( 'tabora-admin-enhancements', TABORA_URL . 'assets/admin-enhancements.js', array( 'jquery' ), TABORA_VERSION, true );

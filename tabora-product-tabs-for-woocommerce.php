@@ -1,8 +1,9 @@
 <?php
 /**
  * Plugin Name: Tabora Product Tabs for WooCommerce
+ * Plugin URI: https://webninjallc.com/
  * Description: Create responsive global and product-specific tabs for WooCommerce products, with rich-text content, media support, an icon gallery, mobile accordion behavior, and drag-and-drop ordering.
- * Version: 1.3.3
+ * Version: 1.3.4
  * Author: Mahfuzar Rahman
  * Author URI: https://profiles.wordpress.org/mahfuzar/
  * Text Domain: tabora-product-tabs-for-woocommerce
@@ -18,7 +19,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'TABORA_VERSION', '1.3.3' );
+define( 'TABORA_VERSION', '1.3.4' );
 define( 'TABORA_FILE', __FILE__ );
 define( 'TABORA_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TABORA_URL', plugin_dir_url( __FILE__ ) );
