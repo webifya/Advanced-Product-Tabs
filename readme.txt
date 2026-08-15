@@ -69,6 +69,14 @@ When enabled, WooCommerce product tabs become accessible accordion panels below 
 
 No. Data is retained by default. To delete it during uninstall, define `TABORA_DELETE_DATA_ON_UNINSTALL` as `true` in wp-config.php before uninstalling.
 
+== Screenshots ==
+
+1. Tabora Product Tabs section in the WooCommerce product editor.
+2. Creating and arranging product-specific tabs with the rich-text editor.
+3. Reusable tabs management screen for creating global product tabs.
+4. Tabora settings and the Products Using Tabora management view.
+5. Responsive product tabs displayed as an accordion on the storefront.
+
 == Changelog ==
 
 = 1.3.4 =
